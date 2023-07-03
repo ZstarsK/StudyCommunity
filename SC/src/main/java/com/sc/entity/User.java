@@ -1,17 +1,76 @@
 package com.sc.entity;
 
-import lombok.Data;
+import ch.qos.logback.core.db.ConnectionSourceBase;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
-public class User {
+import java.io.Serializable;
+import java.util.Collection;
+
+@Getter
+@Setter
+@ToString
+@TableName("userdata")
+@Accessors(chain = true)
+@ApiModel(value = "User对象", description = "")
+public class User implements  Serializable,UserDetails {
+    @ApiModelProperty("用户手机")
     private String phonenum;
+    @ApiModelProperty("用户名称")
     private String name;
+    @ApiModelProperty("密码")
     private String password;
+    @ApiModelProperty("班级id")
     private String clazz_id;
+    @ApiModelProperty("用户性别")
     private String sex;
+    @ApiModelProperty("用户身份")
     private String role;
+    @ApiModelProperty("用户学号")
     private String school_id;
+    @ApiModelProperty("用户头像")
     private String avatar;
+    @ApiModelProperty("用户背景")
     private String cover;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 }
 
