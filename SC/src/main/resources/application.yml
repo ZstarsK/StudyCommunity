@@ -1,11 +1,14 @@
-#MySQL
+
+server:
+  # 端口号设置
+  port: 8083
 
 spring:
   # MySQL 设置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/bbs?useUnicode=true&useSSL=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/mysql?useUnicode=true&useSSL=true&characterEncoding=utf8
     username: root
     password: admin
     druid:
@@ -19,14 +22,41 @@ spring:
   # 时间格式设置
   jackson:
     time-zone: GMT+8
-  # 避免Spring Boot 2.6.0以后新特性默认禁止循环引用
-  main:
-    allow-circular-references: true
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+
+# Mybatis-plus 设置
+mybatis-plus:
+  # 配置Mybatis映射文件
+  mapper-locations: classpath:mapper/*.xml
+  # 配置Mybatis数据返回类型别名（默认别名是类名）
+  type-aliases-package: com.jingchao.pojo
+  global-config:
+    db-config:
+      table-prefix: bbs_
+
+# JWT 配置
+
+jwt:
+  # JWT 存储的请求头
+  tokenHeader: Authorization
+  # JWT 加密使用的密钥
+  secret: bbs-secret
+  # JWT 的超时期限时间（60*60*24）
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+
+
+# 图片服务器的配置信息
 storage:
   ip: 127.0.0.1
   port: 8084
   path: E:/storage/
 
-
-debug: true
