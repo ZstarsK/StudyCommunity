@@ -1,0 +1,32 @@
+#MySQL
+
+spring:
+  # MySQL 设置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/bbs?useUnicode=true&useSSL=true&characterEncoding=utf8
+    username: root
+    password: admin
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+
+      stat-view-servlet:
+        allow: true
+  # 时间格式设置
+  jackson:
+    time-zone: GMT+8
+  # 避免Spring Boot 2.6.0以后新特性默认禁止循环引用
+  main:
+    allow-circular-references: true
+
+storage:
+  ip: 127.0.0.1
+  port: 8084
+  path: E:/storage/
+
+
+debug: true
