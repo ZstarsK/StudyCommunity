@@ -26,7 +26,7 @@ import java.util.UUID;
 public class User implements  Serializable,UserDetails {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("用户手机")
-    @TableId(value = "phonenum",type = IdType.ASSIGN_UUID)
+    @TableId(value = "phonenum",type = IdType.ASSIGN_UUID)//UUID 全局唯一ID（UUID）
     private String phonenum;
     @ApiModelProperty("用户名称")
     private String username;
