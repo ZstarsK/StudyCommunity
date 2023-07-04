@@ -8,7 +8,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/mysql?useUnicode=true&useSSL=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/sc?useUnicode=true&useSSL=true&characterEncoding=utf8
     username: root
     password: admin
     druid:

@@ -23,8 +23,6 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
-    //String phonenum, String username, String clazz_id, String sex,
-    //String role, String school_id, String password,String avator,String cover, String code, HttpServletRequest request
     @ApiOperation(value = "注册")
     @PostMapping("/common/register")
     public ResultBean register(@RequestBody UserRegisterParam userRegisterParam, HttpServletRequest request){
