@@ -1,6 +1,8 @@
 package com.sc.entity;
 
 import ch.qos.logback.core.db.ConnectionSourceBase;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,7 +24,9 @@ import java.util.Collection;
 @Accessors(chain = true)
 @ApiModel(value = "User对象", description = "")
 public class User implements  Serializable,UserDetails {
+    private static final long serialVersionUID = 1L;
     @ApiModelProperty("用户手机")
+    @TableId(value = "phonenum",type = IdType.ASSIGN_UUID)
     private String phonenum;
     @ApiModelProperty("用户名称")
     private String username;
