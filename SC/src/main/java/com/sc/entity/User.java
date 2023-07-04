@@ -24,7 +24,7 @@ public class User implements  Serializable,UserDetails {
     @ApiModelProperty("用户手机")
     private String phonenum;
     @ApiModelProperty("用户名称")
-    private String name;
+    private String username;
     @ApiModelProperty("密码")
     private String password;
     @ApiModelProperty("班级id")

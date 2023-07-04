@@ -1,12 +1,8 @@
 package com.sc.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.sc.config.security.JwtTokenUtil;
 import com.sc.mapper.UserMapper;
 import com.sc.entity.User;
@@ -26,10 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -111,8 +105,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param request
      * @return
      */
+
     @Override
-    public ResultBean register(String username, String password, String code, HttpServletRequest request) {
+    public ResultBean register(String phonenum, String username, String clazz_id, String sex,
+                               String role, String school_id, String password, String avatar, String cover, String code, HttpServletRequest request) {
         if (StringUtils.isNoneBlank(code) && code.length() == 6){
 
             if (StringUtils.isNoneBlank(username) && StringUtils.isNoneBlank(password)){
@@ -127,8 +123,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                     User newUser = new User();
                     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                    newUser.setName(username)
-                            .setPassword(bCryptPasswordEncoder.encode(password));
+                    newUser.setUsername(username)
+                            .setPassword(bCryptPasswordEncoder.encode(password))
+                            .setClazz_id(clazz_id)
+                            .setPhonenum(phonenum)
+                            .setRole(role)
+                            .setSex(sex)
+                            .setAvatar(avatar)
+                            .setCover(cover);
 
                     userMapper.insert(newUser);
                     return ResultBean.success("注册成功！");
@@ -164,7 +166,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResultBean updateUserinfo(UserInfoUpdateParam userInfoUpdateParam) {
         User user = new User();
-        user.setName(userInfoUpdateParam.getNickname());
+        user.setUsername(userInfoUpdateParam.getNickname());
 
         this.updateById(user);
 

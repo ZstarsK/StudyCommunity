@@ -26,7 +26,7 @@ public class LoginController {
     @PostMapping("/common/login")
     public ResultBean login(@RequestBody UserLoginParam  userLoginParam, HttpServletRequest request){
         if (userLoginParam != null){
-            return userService.login(userLoginParam.getUsername(),userLoginParam.getPassword(),request);
+            return userService.login(userLoginParam.getPhonenum(),userLoginParam.getPassword(),request);
         }
         return ResultBean.error("用户名或密码不能为空！");
 
