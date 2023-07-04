@@ -1,7 +1,10 @@
-package com.sc.service.Impl;
+package com.sc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sc.entity.Post;
+import com.sc.entity.User;
 import com.sc.mapper.PostMapper;
 import com.sc.service.PostService;
 import com.sc.vo.ResultBean;
@@ -16,21 +19,25 @@ import java.util.Date;
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Autowired
     private PostMapper postMapper;
+    @Autowired
+    QueryWrapper<Post> queryWrapper;
 
 
     @Override
-    public Post getPostById(Integer postId) {
+    public Post getPostById(String postId) {
         return postMapper.selectById(postId);
     }
 
     @Override
-    public ResultBean deleteCommentById(Integer commentId) {
-        postMapper.deleteById(commentId);
+    public ResultBean deletePostById(String postId) {
+
+        queryWrapper.eq("post_id", postId);
+        postMapper.delete(queryWrapper);
         return ResultBean.success("删除成功");
     }
 
     @Override
-    public ResultBean saveUserComment(PostParam postParam) {
+    public ResultBean saveUserPost(PostParam postParam) {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String day = format.format(date);

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface PostService extends IService<Post> {
-    Post getPostById(Integer postId);
+    Post getPostById(String postId);
 
-    ResultBean deleteCommentById(Integer commentId);
+    ResultBean deletePostById(String postId);
 
-    ResultBean saveUserComment(PostParam commentParam);
+    ResultBean saveUserPost(PostParam commentParam);
 }
