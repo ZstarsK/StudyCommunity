@@ -22,7 +22,7 @@ public class Post implements Serializable {
 
     @ApiModelProperty("帖子id")
     @TableId(value = "post_id", type = IdType.AUTO)
-    private String comment_id;
+    private String post_id;
 
     @ApiModelProperty("评论者手机")
     @TableField("phonenum")
@@ -31,12 +31,18 @@ public class Post implements Serializable {
     @ApiModelProperty("班级id")
     @TableField("clazz_id")
     private String clazz_id;
+
     @ApiModelProperty("标题")
     @TableField("title")
     private String title;
+
     @ApiModelProperty("文章")
     @TableField("detail")
     private String detail;
+
+    @ApiModelProperty("时间")
+    @TableField("post_time")
+    private String postTime;
 
     @ApiModelProperty("图片")
     @TableField("image")
@@ -46,5 +52,5 @@ public class Post implements Serializable {
     private String video;
     @ApiModelProperty("赞数")
     @TableField("likes")
-    private String likes;
+    private int likes;
 }
