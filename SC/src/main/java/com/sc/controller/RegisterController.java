@@ -23,13 +23,19 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
-
+    //String phonenum, String username, String clazz_id, String sex,
+    //String role, String school_id, String password,String avator,String cover, String code, HttpServletRequest request
     @ApiOperation(value = "注册")
     @PostMapping("/common/register")
     public ResultBean register(@RequestBody UserRegisterParam userRegisterParam, HttpServletRequest request){
         if (userRegisterParam != null){
-            return userService.register(userRegisterParam.getUsername(),
+            return userService.register(userRegisterParam.getPhonenum(),userRegisterParam.getUsername(),userRegisterParam.getClazz_id(),
+                    userRegisterParam.getSex(),
+                    userRegisterParam.getRole(),
+                    userRegisterParam.getSchool_id(),
                     userRegisterParam.getPassword(),
+                    userRegisterParam.getAvatar(),
+                    userRegisterParam.getCover(),
                     userRegisterParam.getCode(),request);
         }
         return ResultBean.error("用户名密码不能为空！");

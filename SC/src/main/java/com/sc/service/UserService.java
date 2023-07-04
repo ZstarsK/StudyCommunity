@@ -43,7 +43,10 @@ public interface UserService extends IService<User> {
      * @param request
      * @return
      */
-    ResultBean register(String username, String password, String code, HttpServletRequest request);
+
+
+    ResultBean register(String phonenum, String username, String clazz_id, String sex,
+                                 String role, String school_id, String password, String avatar, String cover, String code, HttpServletRequest request);
 
     /**
      * 用户上传头像
