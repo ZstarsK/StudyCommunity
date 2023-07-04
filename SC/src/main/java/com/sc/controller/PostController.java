@@ -12,6 +12,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "PostController")
 @RestController
 public class PostController {
@@ -29,6 +31,12 @@ public class PostController {
     @GetMapping("/post/get")
     public Post getPostInfoById(@RequestBody String id){
         return postService.getPostById(id);
+    }
+
+    @ApiOperation(value = "获取主页动态信息")
+    @GetMapping("/home")
+    public List<Post> getPostInfoByClassId(@RequestBody String clazzId){
+        return postService.getPostInfoByClazzId(clazzId);
     }
 
     @ApiOperation("value=删除动态")

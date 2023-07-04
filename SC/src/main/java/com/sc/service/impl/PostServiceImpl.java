@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
@@ -26,6 +27,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public Post getPostById(String postId) {
         return postMapper.selectById(postId);
+    }
+
+    @Override
+    public List<Post> getPostInfoByClazzId(String clazzId) {
+        queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("clazz_id", clazzId);
+        List<Post> posts = postMapper.selectList(queryWrapper);
+        return posts;
     }
 
     @Override
