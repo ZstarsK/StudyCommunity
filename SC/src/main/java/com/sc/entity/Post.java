@@ -53,4 +53,8 @@ public class Post implements Serializable {
     @ApiModelProperty("赞数")
     @TableField("likes")
     private int likes;
+
+    @ApiModelProperty("time")
+    @TableField("timestamp")
+    private int timestamp;
 }

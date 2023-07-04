@@ -36,5 +36,7 @@ public class Comment implements Serializable {
     @TableField("detail")
     private String detail;
 
-
+    @ApiModelProperty("time")
+    @TableField("timestamp")
+    private int timestamp;
 }
