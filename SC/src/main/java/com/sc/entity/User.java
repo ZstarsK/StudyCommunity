@@ -29,7 +29,7 @@ public class User implements  Serializable,UserDetails {
     @TableId(value = "phonenum",type = IdType.ASSIGN_UUID)//UUID 全局唯一ID（UUID）
     private String phonenum;
     @ApiModelProperty("用户名称")
-    private String username;
+    private String name;
     @ApiModelProperty("密码")
     private String password;
     @ApiModelProperty("班级id")
@@ -44,6 +44,8 @@ public class User implements  Serializable,UserDetails {
     private String avatar;
     @ApiModelProperty("用户背景")
     private String cover;
+
+
 
 
     @Override

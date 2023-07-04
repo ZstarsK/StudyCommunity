@@ -35,9 +35,6 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   # 配置Mybatis数据返回类型别名（默认别名是类名）
   type-aliases-package: com.sc.entity
-  global-config:
-    db-config:
-      table-prefix: sc_
 
 # JWT 配置
 

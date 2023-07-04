@@ -48,33 +48,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private String tokenHead;
 
 
-    /**
-     * 登录之后返回token
-     * @param username
-     * @param password
-     * @param request
-     * @return
-     */
+
     @Override
-    public ResultBean login(String username, String password, HttpServletRequest request) {
+    public ResultBean login(String phonenum, String password, HttpServletRequest request) {
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        //UserDetails userDetails = userDetailsService.loadUserByUsername(phonenum);
 
-        if (userDetails != null && passwordEncoder.matches(password,userDetails.getPassword())){
+        User user = userMapper.selectOne(
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getPhonenum, phonenum));
+
+        if (user != null && passwordEncoder.matches(password,user.getPassword())){
 
             //更新security 登录用户对象
-            UsernamePasswordAuthenticationToken authenticationToken = new
-                    UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            //UsernamePasswordAuthenticationToken authenticationToken = new
+            //        UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//
+            //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//
+            //// 生成token
+            //String token = jwtTokenUtil.generateToken(userDetails);
+            //HashMap<String, String> tokenMap = new HashMap<>();
+            //tokenMap.put("token",token);
+            //tokenMap.put("tokenHead",tokenHead);
 
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            // 生成token
-            String token = jwtTokenUtil.generateToken(userDetails);
-            HashMap<String, String> tokenMap = new HashMap<>();
-            tokenMap.put("token",token);
-            tokenMap.put("tokenHead",tokenHead);
-
-            return ResultBean.success("登录成功！",tokenMap);
+            return ResultBean.success("登录成功！",user.getPhonenum());
         }
         return ResultBean.error("用户名或密码不正确！");
     }
@@ -99,7 +97,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注册
-     * @param username
      * @param password
      * @param code
      * @param request
@@ -108,14 +105,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResultBean register(String phonenum, String username, String clazz_id, String sex,
-                               String role, String school_id, String password, String avatar, String cover, String code, HttpServletRequest request) {
+                               String role, String school_id, String password, String avatar,
+                               String cover, String code, HttpServletRequest request) {
         if (StringUtils.isNoneBlank(code) && code.length() == 6){
 
-            if (StringUtils.isNoneBlank(username) && StringUtils.isNoneBlank(password)){
+            if (StringUtils.isNoneBlank(phonenum) && StringUtils.isNoneBlank(password)){
                 // 判断用户是否存在
                 User user = userMapper.selectOne(
                         new LambdaQueryWrapper<User>()
-                                .eq(User::getUsername, username)
+                                .eq(User::getPhonenum, phonenum)
                 );
                 if (user == null){
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -123,12 +121,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                     User newUser = new User();
                     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                    newUser.setUsername(username)
-                            .setPassword(bCryptPasswordEncoder.encode(password))
+                    newUser.setPhonenum(phonenum)
+                            .setName(username)
                             .setClazz_id(clazz_id)
-                            .setPhonenum(phonenum)
-                            .setRole(role)
                             .setSex(sex)
+                            .setRole(role)
+                            .setSchool_id(school_id)
+                            .setPassword(bCryptPasswordEncoder.encode(password))
                             .setAvatar(avatar)
                             .setCover(cover);
 
@@ -166,7 +165,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResultBean updateUserinfo(UserInfoUpdateParam userInfoUpdateParam) {
         User user = new User();
-        user.setUsername(userInfoUpdateParam.getNickname());
+        user.setName(userInfoUpdateParam.getNickname());
 
         this.updateById(user);
 

@@ -27,7 +27,9 @@ public class RegisterController {
     @PostMapping("/common/register")
     public ResultBean register(@RequestBody UserRegisterParam userRegisterParam, HttpServletRequest request){
         if (userRegisterParam != null){
-            return userService.register(userRegisterParam.getPhonenum(),userRegisterParam.getUsername(),userRegisterParam.getClazz_id(),
+            return userService.register(userRegisterParam.getPhonenum(),
+                    userRegisterParam.getUsername(),
+                    userRegisterParam.getClazz_id(),
                     userRegisterParam.getSex(),
                     userRegisterParam.getRole(),
                     userRegisterParam.getSchool_id(),
