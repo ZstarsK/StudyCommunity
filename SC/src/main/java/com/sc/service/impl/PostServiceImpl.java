@@ -20,8 +20,7 @@ import java.util.List;
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Autowired
     private PostMapper postMapper;
-    @Autowired
-    QueryWrapper<Post> queryWrapper;
+
 
 
     @Override
@@ -31,15 +30,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public List<Post> getPostInfoByClazzId(String clazzId) {
-        queryWrapper=new QueryWrapper<>();
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("clazz_id", clazzId);
+        /*queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("clazz_id", clazzId);
+        List<Post> posts = postMapper.selectList(queryWrapper);*/
         List<Post> posts = postMapper.selectList(queryWrapper);
         return posts;
     }
 
     @Override
     public ResultBean deletePostById(String postId) {
-
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("post_id", postId);
         postMapper.delete(queryWrapper);
         return ResultBean.success("删除成功");

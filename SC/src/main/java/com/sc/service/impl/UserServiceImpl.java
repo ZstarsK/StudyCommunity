@@ -56,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
-                        .eq(User::getPhonenum, phonenum));
+                        .eq(User::getPhonenum, phonenum));//从手机号获取整个user信息
 
         if (user != null && passwordEncoder.matches(password,user.getPassword())){
 
@@ -72,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             //tokenMap.put("token",token);
             //tokenMap.put("tokenHead",tokenHead);
 
-            return ResultBean.success("登录成功！",user.getPhonenum());
+            return ResultBean.success("登录成功！",user);
         }
         return ResultBean.error("用户名或密码不正确！");
     }
@@ -132,7 +132,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                             .setCover(cover);
 
                     userMapper.insert(newUser);
-                    return ResultBean.success("注册成功！");
+                    return ResultBean.success("注册成功！",newUser);
                 }
                 return ResultBean.error("用户名已经存在！");
             }

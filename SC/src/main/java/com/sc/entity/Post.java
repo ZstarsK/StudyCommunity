@@ -56,5 +56,5 @@ public class Post implements Serializable {
 
     @ApiModelProperty("time")
     @TableField("timestamp")
-    private int timestamp;
+    private long timestamp;
 }
