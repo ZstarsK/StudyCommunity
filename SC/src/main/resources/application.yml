@@ -8,9 +8,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/sc?useUnicode=true&useSSL=true&characterEncoding=utf8
+    url: jdbc:mysql://47.97.218.237:3306/sc?useUnicode=true&useSSL=true&characterEncoding=utf8
     username: root
-    password: admin
+    password: Kkzzxx123.
     druid:
       initial-size: 1
       min-idle: 1
@@ -49,11 +49,21 @@ jwt:
   tokenHead: Bearer
 
 
+# 动态图片服务器的配置信息
+portrait_storage:
+  ip:47.97.218.237
+  port:8084
+  path:/avatar/
 
+# 动态图片服务器的配置信息
+pic_storage:
+  ip:47.97.218.237
+  port:8084
+  path:/picture/
 
-# 图片服务器的配置信息
-storage:
-  ip: 127.0.0.1
-  port: 8084
-  path: E:/storage/
+# 视频服务器的配置信息
+vid_storage:
+  ip:47.97.218.237
+  port:8084
+  path:/video/
 

@@ -5,18 +5,28 @@ import com.sc.entity.Post;
 import com.sc.vo.ResultBean;
 import com.sc.vo.param.PostParam;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
 public interface PostService extends IService<Post> {
-    Post getPostById(String postId);
+    ResultBean getPostById(String postId);
 
-    List<Post> getPostInfoByClazzId(String clazzId);
+    ResultBean getPostInfoByClazzId(String clazzId);
 
     ResultBean deletePostById(String postId);
 
-    ResultBean saveUserPost(PostParam commentParam);
+    ResultBean saveUserPost(PostParam postParam);
+
+    ResultBean updatePostInfoById(PostParam postParam);
+
+    String saveFile(MultipartFile file,String path,String postId);
+
+    String updateFile(MultipartFile file,String fullPath,String postId);
+
+
+
 
 
 }

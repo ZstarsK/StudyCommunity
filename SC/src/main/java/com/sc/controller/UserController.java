@@ -42,8 +42,8 @@ public class UserController {
     @Value("${storage.port}")
     private String port;
 
-    @Value("${storage.path}")
-    private String basePath;
+    @Value("${portrait_storage.path}")
+    private String porPath;
 
 
     @ApiOperation(value = "获取当前登录用户信息")
@@ -71,7 +71,7 @@ public class UserController {
         Long time = System.currentTimeMillis();
 
         // 文件保存的路径
-        String path = basePath +"User/"+"id_"+id+"/portrait/"+time+"_."+pType;
+        String path = porPath +"User/"+"id_"+id+"/portrait/"+time+"_."+pType;
 //        System.out.println(path);
 
         File outFile = new File(path);
