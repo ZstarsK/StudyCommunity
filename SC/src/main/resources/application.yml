@@ -37,7 +37,6 @@ mybatis-plus:
   type-aliases-package: com.sc.entity
 
 # JWT 配置
-
 jwt:
   # JWT 存储的请求头
   tokenHeader: Authorization
@@ -51,19 +50,19 @@ jwt:
 
 # 动态图片服务器的配置信息
 portrait_storage:
-  ip:47.97.218.237
-  port:8084
-  path:/avatar/
+  ip: 47.97.218.237
+  port: 8084
+  path: /avatar/
 
 # 动态图片服务器的配置信息
 pic_storage:
-  ip:47.97.218.237
-  port:8084
-  path:/picture/
+  ip: 47.97.218.237
+  port: 8084
+  path: /picture/
 
 # 视频服务器的配置信息
 vid_storage:
-  ip:47.97.218.237
-  port:8084
-  path:/video/
+  ip: 47.97.218.237
+  port: 8084
+  path: /video/
 
