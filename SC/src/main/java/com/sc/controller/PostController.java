@@ -63,6 +63,11 @@ public class PostController {
     @PostMapping("/post/update")
     public ResultBean updatePostInfoById(@RequestBody PostParam postParam){
 
+        MultipartFile imageFile=postParam.getImage();
+        MultipartFile videoFile=postParam.getVideo();
+        String postId = postParam.getPost_id();
+        postParam.setImagePath(postService.updateFile(imageFile,postParam.getImagePath(),picPath,postId));
+        postParam.setVideoPath(postService.updateFile(videoFile,postParam.getVideoPath(),vidPath,postId));
         return postService.updatePostInfoById(postParam);
     }
     @ApiOperation(value="删除动态")

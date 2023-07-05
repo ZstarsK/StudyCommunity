@@ -16,7 +16,7 @@ import java.security.PrivateKey;
 public class PostParam {
 
     private String post_id;
-    private String username;
+    private String phonenum;
     private String classId;
     private String title;
     private String postContent;
@@ -24,5 +24,6 @@ public class PostParam {
     private String imagePath;
     private MultipartFile video;
     private String videoPath;
+    private String commentsId;
     private int likes;
 }
