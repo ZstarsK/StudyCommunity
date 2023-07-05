@@ -1,5 +1,6 @@
 package com.sc.controller;
 
+import com.sc.Util.GetUserByToken;
 import com.sc.entity.Post;
 import com.sc.service.PostService;
 import com.sc.service.UserService;
@@ -30,6 +31,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private GetUserByToken getUserByToken;
+
     @ApiOperation(value = "保存用户的动态")
     @PutMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
@@ -49,7 +53,9 @@ public class PostController {
 
     @ApiOperation(value = "获取主页动态信息")
     @GetMapping("/home")
-    public ResultBean getPostInfoByClassId(@RequestBody String clazzId){
+    public ResultBean getPostInfoByClassId(@RequestBody String token){
+        System.out.println("receive");
+        String clazzId = getUserByToken.getUserByToken(token).getClazz_id();
         return postService.getPostInfoByClazzId(clazzId);
     }
 

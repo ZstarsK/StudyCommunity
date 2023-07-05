@@ -25,8 +25,12 @@ import java.util.UUID;
 @ApiModel(value = "User对象", description = "")
 public class User implements  Serializable,UserDetails {
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty("用户id")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     @ApiModelProperty("用户手机")
-    @TableId(value = "username",type = IdType.ASSIGN_UUID)//UUID 全局唯一ID（UUID）
     private String username;
     @ApiModelProperty("用户名称")
     private String name;
@@ -53,10 +57,6 @@ public class User implements  Serializable,UserDetails {
         return null;
     }
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
 
     @Override
     public boolean isAccountNonExpired() {

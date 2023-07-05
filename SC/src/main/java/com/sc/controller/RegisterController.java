@@ -28,7 +28,7 @@ public class RegisterController {
     public ResultBean register(@RequestBody UserRegisterParam userRegisterParam, HttpServletRequest request){
         if (userRegisterParam != null){
             return userService.register(userRegisterParam.getUsername(),
-                    userRegisterParam.getUsername(),
+                    userRegisterParam.getName(),
                     userRegisterParam.getClazz_id(),
                     userRegisterParam.getSex(),
                     userRegisterParam.getRole(),

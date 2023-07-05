@@ -1,0 +1,1 @@
+open java.lang.invoke;

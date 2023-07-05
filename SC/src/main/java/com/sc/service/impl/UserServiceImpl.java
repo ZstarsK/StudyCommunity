@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -117,9 +116,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                                 .eq(User::getUsername, username)
                 );
                 if (user == null){
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String date = format.format(new Date());
-
                     User newUser = new User();
                     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                     newUser.setUsername(username)

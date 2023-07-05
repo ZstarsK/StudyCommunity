@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class SCApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SCApplication.class, args);
     }
