@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 public class UserLoginParam {
 
     @ApiModelProperty(value = "手机号",required = true)
-    private String phonenum;
+    private String username;
 
     @ApiModelProperty(value = "密码",required = true)
     private String password;

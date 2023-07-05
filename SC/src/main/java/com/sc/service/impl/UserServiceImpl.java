@@ -50,29 +50,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public ResultBean login(String phonenum, String password, HttpServletRequest request) {
+    public ResultBean login(String username, String password, HttpServletRequest request) {
 
-        //UserDetails userDetails = userDetailsService.loadUserByUsername(phonenum);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
-                        .eq(User::getPhonenum, phonenum));//从手机号获取整个user信息
+                        .eq(User::getUsername, username));//从手机号获取整个user信息
 
         if (user != null && passwordEncoder.matches(password,user.getPassword())){
 
             //更新security 登录用户对象
-            //UsernamePasswordAuthenticationToken authenticationToken = new
-            //        UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//
-            //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//
-            //// 生成token
-            //String token = jwtTokenUtil.generateToken(userDetails);
-            //HashMap<String, String> tokenMap = new HashMap<>();
-            //tokenMap.put("token",token);
-            //tokenMap.put("tokenHead",tokenHead);
+            UsernamePasswordAuthenticationToken authenticationToken = new
+                    UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            return ResultBean.success("登录成功！",user);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            // 生成token
+            String token = jwtTokenUtil.generateToken(userDetails);
+            HashMap<String, String> tokenMap = new HashMap<>();
+            tokenMap.put("token",token);
+            tokenMap.put("tokenHead",tokenHead);
+            tokenMap.put("name",user.getName());
+
+            return ResultBean.success("登录成功！",tokenMap);
         }
         return ResultBean.error("用户名或密码不正确！");
     }
@@ -104,16 +105,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
 
     @Override
-    public ResultBean register(String phonenum, String username, String clazz_id, String sex,
+    public ResultBean register(String username, String name, String clazz_id, String sex,
                                String role, String school_id, String password, String avatar,
                                String cover, String code, HttpServletRequest request) {
         if (StringUtils.isNoneBlank(code) && code.length() == 6){
 
-            if (StringUtils.isNoneBlank(phonenum) && StringUtils.isNoneBlank(password)){
+            if (StringUtils.isNoneBlank(username) && StringUtils.isNoneBlank(password)){
                 // 判断用户是否存在
                 User user = userMapper.selectOne(
                         new LambdaQueryWrapper<User>()
-                                .eq(User::getPhonenum, phonenum)
+                                .eq(User::getUsername, username)
                 );
                 if (user == null){
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -121,8 +122,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                     User newUser = new User();
                     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                    newUser.setPhonenum(phonenum)
-                            .setName(username)
+                    newUser.setUsername(username)
+                            .setName(name)
                             .setClazz_id(clazz_id)
                             .setSex(sex)
                             .setRole(role)
@@ -150,7 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResultBean updatePortrait(Integer id, String pathDB) {
 
-        this.update(Wrappers.lambdaUpdate(User.class).set(User::getAvatar,pathDB).eq(User::getPhonenum,id));
+        this.update(Wrappers.lambdaUpdate(User.class).set(User::getAvatar,pathDB).eq(User::getUsername,id));
 
         // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
 

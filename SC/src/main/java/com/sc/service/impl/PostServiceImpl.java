@@ -63,7 +63,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         Post post=new Post();
         post.setPost_id(postParam.getPost_id());
-        post.setPhonenum(postParam.getPhoneNum());
+        post.setUsername(postParam.getUsername());
         post.setClazz_id(postParam.getClassId());
         post.setTitle(postParam.getTitle());
         post.setDetail(postParam.getPostContent());

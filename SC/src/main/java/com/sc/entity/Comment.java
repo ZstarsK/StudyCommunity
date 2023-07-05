@@ -29,8 +29,8 @@ public class Comment implements Serializable {
     private String post_id;
 
     @ApiModelProperty("评论者手机")
-    @TableField("phonenum")
-    private String phonenum;
+    @TableField("username")
+    private String username;
 
     @ApiModelProperty("文章")
     @TableField("detail")

@@ -16,7 +16,7 @@ import java.security.PrivateKey;
 public class PostParam {
 
     private String post_id;
-    private String phoneNum;
+    private String username;
     private String classId;
     private String title;
     private String postContent;
