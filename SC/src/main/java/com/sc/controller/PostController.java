@@ -47,7 +47,7 @@ public class PostController {
 
     @ApiOperation(value = "获取动态信息")
     @GetMapping("/post/get")
-    public ResultBean getPostInfoById(@RequestBody String id){
+    public ResultBean getPostInfoById(@RequestParam("id") String id){
         return postService.getPostById(id);
     }
 

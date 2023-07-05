@@ -12,7 +12,7 @@ import java.security.PrivateKey;
 @Data
 @EqualsAndHashCode
 @Accessors(chain = true)
-@ApiModel(value = "UserInfoUpdate对象",description = "")
+@ApiModel(value = "Post对象",description = "")
 public class PostParam {
 
     private String postId;
