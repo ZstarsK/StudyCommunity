@@ -15,7 +15,7 @@ import java.security.PrivateKey;
 @ApiModel(value = "UserInfoUpdate对象",description = "")
 public class PostParam {
 
-    private String post_id;
+    private String postId;
     private String phonenum;
     private String classId;
     private String title;

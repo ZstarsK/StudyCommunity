@@ -21,16 +21,16 @@ public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("帖子id")
-    @TableId(value = "post_id", type = IdType.AUTO)
-    private String post_id;
+    @TableId(value = "postId", type = IdType.AUTO)
+    private String postId;
 
     @ApiModelProperty("评论者手机")
     @TableField("phonenum")
     private String phonenum;
 
     @ApiModelProperty("班级id")
-    @TableField("clazz_id")
-    private String clazz_id;
+    @TableField("clazzId")
+    private String clazzId;
 
     @ApiModelProperty("标题")
     @TableField("title")
@@ -41,7 +41,7 @@ public class Post implements Serializable {
     private String detail;
 
     @ApiModelProperty("时间")
-    @TableField("post_time")
+    @TableField("postTime")
     private String postTime;
 
     @ApiModelProperty("图片")
@@ -54,7 +54,4 @@ public class Post implements Serializable {
     @TableField("likes")
     private int likes;
 
-    @ApiModelProperty("time")
-    @TableField("timestamp")
-    private long timestamp;
 }

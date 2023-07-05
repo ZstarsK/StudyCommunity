@@ -40,9 +40,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResultBean getPostInfoByClazzId(String clazzId) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("clazz_id", clazzId);
+        queryWrapper.eq("clazzId", clazzId);
         /*queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("clazz_id", clazzId);
+        queryWrapper.eq("clazzId", clazzId);
         List<Post> posts = postMapper.selectList(queryWrapper);*/
         return ResultBean.success("动态加载成功",postMapper.selectList(queryWrapper));
     }
@@ -50,7 +50,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResultBean deletePostById(String postId) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("post_id", postId);
+        queryWrapper.eq("postId", postId);
         postMapper.delete(queryWrapper);
         return ResultBean.success("删除成功");
     }
@@ -62,9 +62,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         String day = format.format(date);
 
         Post post=new Post();
-        post.setPost_id(postParam.getPost_id());
+        post.setPostId(postParam.getPostId());
         post.setPhonenum(postParam.getPhonenum());
-        post.setClazz_id(postParam.getClassId());
+        post.setClazzId(postParam.getClassId());
         post.setTitle(postParam.getTitle());
         post.setDetail(postParam.getPostContent());
         post.setImage(postParam.getImagePath());
@@ -80,18 +80,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResultBean updatePostInfoById(PostParam postParam) {
 
-        Post post=postMapper.selectById(postParam.getPost_id());
+        Post post=postMapper.selectById(postParam.getPostId());
 
         this.update(Wrappers.lambdaUpdate(post).set(Post::getDetail,postParam.getPostContent())
-                .eq(Post::getPost_id,postParam.getPost_id()));
+                .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getTitle,postParam.getTitle())
-                .eq(Post::getPost_id,postParam.getPost_id()));
+                .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getImage,postParam.getImagePath())
-                .eq(Post::getPost_id,postParam.getPost_id()));
+                .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
-                .eq(Post::getPost_id,postParam.getPost_id()));
+                .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getLikes,postParam.getLikes())
-                .eq(Post::getPost_id,postParam.getPost_id()));
+                .eq(Post::getPostId,postParam.getPostId()));
 
         return ResultBean.success("动态更新成功",post);
     }

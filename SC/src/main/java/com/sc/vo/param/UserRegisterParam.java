@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 @Accessors(chain = true)
 @ApiModel(value = "UserRegister对象",description = "")
 public class UserRegisterParam {
-    //String username, String username, String clazz_id, String sex,
-    //String role, String school_id, String password,String avatar,String cover, String code, HttpServletRequest request
+    //String username, String username, String clazzId, String sex,
+    //String role, String schoolId, String password,String avatar,String cover, String code, HttpServletRequest request
     @ApiModelProperty(value = "用户名",required = true)
     private String username;
     private String name;
-    private String clazz_id;
+    private String clazzId;
     private String sex;
     private String role;
-    private String school_id;
+    private String schoolId;
     private String avatar;
     private String cover;
 

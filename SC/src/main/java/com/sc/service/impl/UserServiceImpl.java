@@ -72,6 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             tokenMap.put("tokenHead",tokenHead);
             tokenMap.put("name",user.getName());
 
+
             return ResultBean.success("登录成功！",tokenMap);
         }
         return ResultBean.error("用户名或密码不正确！");
@@ -104,8 +105,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
 
     @Override
-    public ResultBean register(String username, String name, String clazz_id, String sex,
-                               String role, String school_id, String password, String avatar,
+    public ResultBean register(String username, String name, String clazzId, String sex,
+                               String role, String schoolId, String password, String avatar,
                                String cover, String code, HttpServletRequest request) {
         if (StringUtils.isNoneBlank(code) && code.length() == 6){
 
@@ -120,10 +121,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                     newUser.setUsername(username)
                             .setName(name)
-                            .setClazz_id(clazz_id)
+                            .setClazzId(clazzId)
                             .setSex(sex)
                             .setRole(role)
-                            .setSchool_id(school_id)
+                            .setSchoolId(schoolId)
                             .setPassword(bCryptPasswordEncoder.encode(password))
                             .setAvatar(avatar)
                             .setCover(cover);

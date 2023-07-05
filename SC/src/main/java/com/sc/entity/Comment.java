@@ -21,12 +21,12 @@ public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("评论id")
-    @TableId(value = "comment_id", type = IdType.AUTO)
-    private String comment_id;
+    @TableId(value = "commentId", type = IdType.AUTO)
+    private String commentId;
 
     @ApiModelProperty("对应帖子id")
-    @TableField("post_id")
-    private String post_id;
+    @TableField("postId")
+    private String postId;
 
     @ApiModelProperty("评论者手机")
     @TableField("username")

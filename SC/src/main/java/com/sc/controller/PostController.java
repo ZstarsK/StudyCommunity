@@ -39,7 +39,7 @@ public class PostController {
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
-        String postId = postParam.getPost_id();
+        String postId = postParam.getPostId();
         if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
         if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
         return postService.saveUserPost(postParam);
@@ -53,9 +53,8 @@ public class PostController {
 
     @ApiOperation(value = "获取主页动态信息")
     @GetMapping("/home")
-    public ResultBean getPostInfoByClassId(@RequestBody String token){
-        System.out.println("receive");
-        String clazzId = getUserByToken.getUserByToken(token).getClazz_id();
+    public ResultBean getPostInfoByClassId(@RequestParam("token") String token){
+        String clazzId = getUserByToken.getUserByToken(token).getClazzId();
         return postService.getPostInfoByClazzId(clazzId);
     }
 
@@ -65,7 +64,7 @@ public class PostController {
 
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
-        String postId = postParam.getPost_id();
+        String postId = postParam.getPostId();
         postParam.setImagePath(postService.updateFile(imageFile,postParam.getImagePath(),picPath,postId));
         postParam.setVideoPath(postService.updateFile(videoFile,postParam.getVideoPath(),vidPath,postId));
         return postService.updatePostInfoById(postParam);

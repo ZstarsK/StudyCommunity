@@ -40,27 +40,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // 获取Header
         String authHeader = request.getHeader(tokenHeader);
-        System.out.println("authHeader="+authHeader);
 
         //存在token，但是不是tokenHead开头
         if(authHeader != null && authHeader.startsWith(tokenHead)){
-            System.out.println("2");
             // 字段截取authToken
             String authToken = authHeader.substring(tokenHead.length());
 
             // 根据authToken获取 username
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             //token存在用户名，但是未登录
-            System.out.println("3+"+username);
             if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
                 //登录
-                System.out.println("4");
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 // 验证token是否有效，如果有效，将他重新放到用户对象里。
                 if(jwtTokenUtil.validateToken(authToken,userDetails)){
                     UsernamePasswordAuthenticationToken authenticationToken = new
                             UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                    System.out.println("5");
                     // 重新设置到用户对象里
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));;
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

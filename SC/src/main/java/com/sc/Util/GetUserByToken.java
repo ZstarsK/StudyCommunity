@@ -18,7 +18,6 @@ public class GetUserByToken {
     public User getUserByToken(String token) {
         token = token.substring(6);
         String username = jwtTokenUtil.getUsernameFromToken(token);
-
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
                         .eq(User::getUsername, username)

@@ -29,10 +29,10 @@ public class RegisterController {
         if (userRegisterParam != null){
             return userService.register(userRegisterParam.getUsername(),
                     userRegisterParam.getName(),
-                    userRegisterParam.getClazz_id(),
+                    userRegisterParam.getClazzId(),
                     userRegisterParam.getSex(),
                     userRegisterParam.getRole(),
-                    userRegisterParam.getSchool_id(),
+                    userRegisterParam.getSchoolId(),
                     userRegisterParam.getPassword(),
                     userRegisterParam.getAvatar(),
                     userRegisterParam.getCover(),
