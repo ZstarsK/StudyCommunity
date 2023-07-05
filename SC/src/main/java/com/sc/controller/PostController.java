@@ -30,9 +30,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @ApiOperation(value = "保存用户的动态")
-    @PutMapping("/post/save")
-    public ResultBean saveUserPost(@RequestBody PostParam postParam){
+    @ApiOperation(value = "更新用户的动态")
+    @PutMapping("/post/update")
+    public ResultBean updateUserPost(@RequestBody PostParam postParam){
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
         String postId = postParam.getPost_id();
@@ -57,6 +57,11 @@ public class PostController {
     @PostMapping("/post/update")
     public ResultBean updatePostInfoById(@RequestBody PostParam postParam){
 
+        MultipartFile imageFile=postParam.getImage();
+        MultipartFile videoFile=postParam.getVideo();
+        String postId = postParam.getPost_id();
+        postParam.setImagePath(postService.updateFile(imageFile,postParam.getImagePath(),picPath,postId));
+        postParam.setVideoPath(postService.updateFile(videoFile,postParam.getVideoPath(),vidPath,postId));
         return postService.updatePostInfoById(postParam);
     }
     @ApiOperation(value="删除动态")

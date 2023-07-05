@@ -63,7 +63,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         Post post=new Post();
         post.setPost_id(postParam.getPost_id());
-        post.setUsername(postParam.getUsername());
+        post.setPhonenum(postParam.getPhonenum());
         post.setClazz_id(postParam.getClassId());
         post.setTitle(postParam.getTitle());
         post.setDetail(postParam.getPostContent());
@@ -90,41 +90,70 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .eq(Post::getPost_id,postParam.getPost_id()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
                 .eq(Post::getPost_id,postParam.getPost_id()));
+        this.update(Wrappers.lambdaUpdate(post).set(Post::getLikes,postParam.getLikes())
+                .eq(Post::getPost_id,postParam.getPost_id()));
 
         return ResultBean.success("动态更新成功",post);
     }
 
     @Override
     public String saveFile(MultipartFile file,String path,String postId) {
-        Long time = System.currentTimeMillis();
+        String pType = getFileType(file);
+        String filePath = path + "/"+postId + pType;
+        File outFile = new File(filePath);
+        if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
+            outFile.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(new File(filePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "http://" + ip + ":" + port + "/" + filePath;
+    }
+
+
+    @Override
+    public String updateFile(MultipartFile file, String fullPath,String path, String postId) {
+        //用户第一次上传文件,fullPath=null;
+        if (!file.isEmpty()&&fullPath==null){
+            return saveFile(file,path,postId);
+        }
+        //用户非第一次上传文件
+        else {
+            //fullPath="Http://ip:port/path/postId.pType";
+            //正则表达式，用于截取“/path/postId.pType”;
+            String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+            File originFile = new File(filePath);
+            //动态之前包含文件，用户删除文件
+            if (originFile.exists()) {
+                if (file.isEmpty()) {
+                    originFile.delete();
+                    return null;
+                }
+            }
+            //用户修改文件
+            if (!file.isEmpty()) {
+                try {
+                    file.transferTo(new File(filePath));
+                    return fullPath;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getFileType(MultipartFile file) {
         String pType = file.getContentType();
         pType = pType.substring(pType.indexOf("/") + 1);
         if ("jpeg".equals(pType)) {
             pType = "jpg";
-
-            String filePath = path + "/"+postId + pType;
-            File outFile = new File(filePath);
-            if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-                outFile.getParentFile().mkdirs();
-            }
-            try {
-                file.transferTo(new File(path));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        return "http://" + ip + ":" + port + "/" + "User/" + "id_" + postId + "/portrait/" + time + "_." + pType;
-    }
-
-    @Override
-    public String updateFile(MultipartFile file, String fullPath, String postId) {
-        File originFile=new File(fullPath);
-        if (originFile.exists()) {
-            originFile.delete();
-        }else {
-
-        }
-        return null;
+        return pType;
     }
 
 
