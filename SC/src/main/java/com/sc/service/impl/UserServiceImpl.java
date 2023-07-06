@@ -3,6 +3,7 @@ package com.sc.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sc.Util.GetUserByToken;
 import com.sc.config.security.JwtTokenUtil;
 import com.sc.mapper.UserMapper;
 import com.sc.entity.User;
@@ -191,6 +192,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(null);
         return ResultBean.success("用户信息获取成功",user);
     }
+
+
 
     @Override
     public User getUserInfoByUserId(Integer userId) {

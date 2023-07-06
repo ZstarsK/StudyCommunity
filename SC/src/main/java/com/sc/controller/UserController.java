@@ -1,6 +1,7 @@
 package com.sc.controller;
 
 
+import com.sc.Util.GetUserByToken;
 import com.sc.entity.User;
 import com.sc.vo.ResultBean;
 import com.sc.service.UserService;
@@ -44,6 +45,9 @@ public class UserController {
 
     @Value("${portrait_storage.path}")
     private String porPath;
+
+    @Autowired
+    private GetUserByToken getUserByToken;
 
 
     @ApiOperation(value = "获取当前登录用户信息")
@@ -105,6 +109,13 @@ public class UserController {
     @ApiOperation(value = "通过用户ID获取用户信息")
     @GetMapping("/getUserinfoById")
     public ResultBean getUserinfoById(@RequestParam("username") String username){
+        return userService.getUserinfoById(username);
+    }
+
+    @ApiOperation(value = "通过用户Token获取用户信息")
+    @GetMapping("/getUserinfoByToken")
+    public ResultBean getUserinfoByToken(@RequestParam("token") String token){
+        String username = getUserByToken.getUserByToken(token).getUsername();
         return userService.getUserinfoById(username);
     }
 

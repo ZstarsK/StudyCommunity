@@ -37,11 +37,11 @@ public class PostController {
     @ApiOperation(value = "保存用户的动态")
     @PutMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
-        MultipartFile imageFile=postParam.getImage();
-        MultipartFile videoFile=postParam.getVideo();
-        String postId = postParam.getPostId();
-        if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
-        if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
+        //MultipartFile imageFile=postParam.getImage();
+        //MultipartFile videoFile=postParam.getVideo();
+        //String postId = postParam.getPostId();
+        //if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
+        //if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
         return postService.saveUserPost(postParam);
     }
 

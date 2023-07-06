@@ -25,11 +25,14 @@ public interface PostService extends IService<Post> {
 
     void deleteFile(String path);
 
+
+
     //String saveFile(MultipartFile file,String path,String postId);
+
+    //String getFileType(MultipartFile file);
 
     //String updateFile(String fullPath,String path,String postId);
 
-    //String getFileType(MultipartFile file);
 
 
 
