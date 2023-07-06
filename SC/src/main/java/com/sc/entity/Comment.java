@@ -28,7 +28,7 @@ public class Comment implements Serializable {
     @TableField("postId")
     private String postId;
 
-    @ApiModelProperty("评论者手机")
+    @ApiModelProperty("用户名")
     @TableField("username")
     private String username;
 
@@ -37,6 +37,6 @@ public class Comment implements Serializable {
     private String detail;
 
     @ApiModelProperty("time")
-    @TableField("timestamp")
-    private int timestamp;
+    @TableField("postTime")
+    private String postTime;
 }

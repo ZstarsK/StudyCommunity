@@ -21,6 +21,8 @@ public interface PostService extends IService<Post> {
 
     ResultBean updatePostInfoById(PostParam postParam);
 
+    int updateLikes(String postId,int likes);
+
     String saveFile(MultipartFile file,String path,String postId);
 
     String updateFile(MultipartFile file,String fullPath,String path,String postId);

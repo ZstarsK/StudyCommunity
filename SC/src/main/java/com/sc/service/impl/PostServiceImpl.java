@@ -2,6 +2,7 @@ package com.sc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sc.entity.Post;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +26,9 @@ import java.util.List;
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private CommentServiceImpl commentService;
 
     @Value("${pic_storage.ip}")
     private String ip;
@@ -63,7 +68,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         Post post=new Post();
         post.setPostId(postParam.getPostId());
-        post.setPhonenum(postParam.getPhonenum());
+        post.setUsername(postParam.getUsername());
         post.setClazzId(postParam.getClassId());
         post.setTitle(postParam.getTitle());
         post.setDetail(postParam.getPostContent());
@@ -97,6 +102,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    public int updateLikes(String postId,int likes) {
+        int l=likes;
+        UpdateWrapper<Post> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("postId",postId);
+        updateWrapper.set("likes",l++);
+        return l;
+    }
+
+    @Override
     public String saveFile(MultipartFile file,String path,String postId) {
         String pType = getFileType(file);
         String filePath = path + "/"+postId + pType;
@@ -109,7 +123,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "http://" + ip + ":" + port + "/" + filePath;
     }
 

@@ -69,6 +69,13 @@ public class PostController {
         postParam.setVideoPath(postService.updateFile(videoFile,postParam.getVideoPath(),vidPath,postId));
         return postService.updatePostInfoById(postParam);
     }
+
+    @ApiOperation(value = "更新动态信息")
+    @PostMapping("/post/likes/update")
+    public int  updatePostInfoById(@RequestParam("postId") String postId,
+                                         @RequestParam("likes") int likes){
+        return postService.updateLikes(postId,likes);
+    }
     @ApiOperation(value="删除动态")
     @DeleteMapping("/post/delete")
     public ResultBean deletePostById(@RequestBody String postId){

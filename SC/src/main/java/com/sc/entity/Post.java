@@ -25,8 +25,8 @@ public class Post implements Serializable {
     private String postId;
 
     @ApiModelProperty("评论者手机")
-    @TableField("phonenum")
-    private String phonenum;
+    @TableField("username")
+    private String username;
 
     @ApiModelProperty("班级id")
     @TableField("clazzId")
@@ -50,6 +50,11 @@ public class Post implements Serializable {
     @ApiModelProperty("视频")
     @TableField("video")
     private String video;
+
+    @ApiModelProperty("评论")
+    @TableField("comment")
+    private String comment;
+
     @ApiModelProperty("赞数")
     @TableField("likes")
     private int likes;
