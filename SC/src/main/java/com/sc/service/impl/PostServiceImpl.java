@@ -87,6 +87,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         Post post=postMapper.selectById(postParam.getPostId());
 
+        if (postParam.getImagePath()==null)deleteFile(post.getImage());
+        if (postParam.getVideoPath()==null)deleteFile(post.getVideo());
+
         this.update(Wrappers.lambdaUpdate(post).set(Post::getDetail,postParam.getPostContent())
                 .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getTitle,postParam.getTitle())
@@ -111,63 +114,68 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public String saveFile(MultipartFile file,String path,String postId) {
-        String pType = getFileType(file);
-        String filePath = path + "/"+postId + pType;
-        File outFile = new File(filePath);
-        if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-            outFile.getParentFile().mkdirs();
-        }
-        try {
-            file.transferTo(new File(filePath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "http://" + ip + ":" + port + "/" + filePath;
+    public void deleteFile(String fullPath) {
+        String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+        File originFile = new File(filePath);
+        originFile.delete();
     }
 
+//    @Override
+//    public String saveFile(MultipartFile file,String path,String postId) {
+//        String pType = getFileType(file);
+//        String filePath = path + "/"+postId + pType;
+//        File outFile = new File(filePath);
+//        if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
+//            outFile.getParentFile().mkdirs();
+//        }
+//        try {
+//            file.transferTo(new File(filePath));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "http://" + ip + ":" + port + "/" + filePath;
+//    }
 
-    @Override
-    public String updateFile(MultipartFile file, String fullPath,String path, String postId) {
-        //用户第一次上传文件,fullPath=null;
-        if (!file.isEmpty()&&fullPath==null){
-            return saveFile(file,path,postId);
-        }
-        //用户非第一次上传文件
-        else {
-            //fullPath="Http://ip:port/path/postId.pType";
-            //正则表达式，用于截取“/path/postId.pType”;
-            String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
-            File originFile = new File(filePath);
-            //动态之前包含文件，用户删除文件
-            if (originFile.exists()) {
-                if (file.isEmpty()) {
-                    originFile.delete();
-                    return null;
-                }
-            }
-            //用户修改文件
-            if (!file.isEmpty()) {
-                try {
-                    file.transferTo(new File(filePath));
-                    return fullPath;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
 
-    @Override
-    public String getFileType(MultipartFile file) {
-        String pType = file.getContentType();
-        pType = pType.substring(pType.indexOf("/") + 1);
-        if ("jpeg".equals(pType)) {
-            pType = "jpg";
-        }
-        return pType;
-    }
+//    @Override
+//    public String updateFile(String fullPath,String path, String postId) {
+//        //用户第一次上传文件,fullPath=null;
+//
+//        //用户非第一次上传文件
+//         {
+//            //fullPath="Http://ip:port/path/postId.pType";
+//            //正则表达式，用于截取“/path/postId.pType”;
+//            String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+//            File originFile = new File(filePath);
+//            //动态之前包含文件，用户删除文件
+//            if (originFile.exists()) {
+//                if (file.isEmpty()) {
+//                    originFile.delete();
+//                    return null;
+//                }
+//            }
+//            //用户修改文件
+//            if (!file.isEmpty()) {
+//                try {
+//                    file.transferTo(new File(filePath));
+//                    return fullPath;
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return null;
+//    }
+
+//    @Override
+//    public String getFileType(MultipartFile file) {
+//        String pType = file.getContentType();
+//        pType = pType.substring(pType.indexOf("/") + 1);
+//        if ("jpeg".equals(pType)) {
+//            pType = "jpg";
+//        }
+//        return pType;
+//    }
 
 
 }

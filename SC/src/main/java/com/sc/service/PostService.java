@@ -23,11 +23,13 @@ public interface PostService extends IService<Post> {
 
     int updateLikes(String postId,int likes);
 
-    String saveFile(MultipartFile file,String path,String postId);
+    void deleteFile(String path);
 
-    String updateFile(MultipartFile file,String fullPath,String path,String postId);
+    //String saveFile(MultipartFile file,String path,String postId);
 
-    String getFileType(MultipartFile file);
+    //String updateFile(String fullPath,String path,String postId);
+
+    //String getFileType(MultipartFile file);
 
 
 
