@@ -64,6 +64,7 @@ public interface UserService extends IService<User> {
      */
     ResultBean updateUserinfo(UserInfoUpdateParam userInfoUpdateParam);
 
+    ResultBean getUserinfoById(String username);
     /**
      * 通过用户id获取用户信息
      * @param id

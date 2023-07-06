@@ -52,8 +52,8 @@ public class Post implements Serializable {
     private String video;
 
     @ApiModelProperty("评论")
-    @TableField("comment")
-    private String comment;
+    @TableField("commentId")
+    private String commentId;
 
     @ApiModelProperty("赞数")
     @TableField("likes")

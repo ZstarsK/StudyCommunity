@@ -57,7 +57,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("postId", postId);
         String updatedCommentId= postMapper.selectOne(updateWrapper)
-                .getComment().replaceFirst(";"+commentId,"");
+                .getCommentId().replaceFirst(";"+commentId,"");
         updateWrapper.set("commentId",updatedCommentId);
         postMapper.update(null,updateWrapper);
         return ResultBean.success("评论删除成功");
@@ -83,7 +83,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         updateWrapper.eq("postId", postId);
 
         StringBuilder commentId=new StringBuilder(postMapper
-                .selectById(postId).getComment());
+                .selectById(postId).getCommentId());
         commentId.append(";").append(commentParam.getCommentId());
 
         updateWrapper.set("commentId",commentId);

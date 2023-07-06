@@ -103,11 +103,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "通过用户ID获取用户信息")
-    @PostMapping("/common/user/getUserinfoById/{id}")
-    public User getUserinfoById(@PathVariable("id") Integer id){
-        User user = userService.queryUserinfoById(id);
-        user.setPassword(null);
-        return user;
+    @GetMapping("/getUserinfoById")
+    public ResultBean getUserinfoById(@RequestParam("username") String username){
+        return userService.getUserinfoById(username);
     }
 
 }

@@ -8,9 +8,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://47.97.218.237:3306/sc?useUnicode=true&useSSL=true&characterEncoding=utf8
-    username: root
-    password: Kkzzxx123.
+    url: jdbc:mysql://1.117.52.175:3306/sc?useUnicode=true&useSSL=true&characterEncoding=utf8
+    username: sc
+    password: YWNmnFaPbyLHjpZd
     druid:
       initial-size: 1
       min-idle: 1
