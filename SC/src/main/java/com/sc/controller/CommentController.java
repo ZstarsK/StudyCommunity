@@ -23,17 +23,22 @@ public class CommentController {
     public ResultBean getUserComment(@RequestParam("postId") String postId){
         return commentService.getCommentByPostId(postId);
     }
-    @ApiOperation(value = "保存用户的评论")
-    @PutMapping("/comment/save")
-    public ResultBean saveUserComment(@RequestBody CommentParam commentParam){
-        return commentService.saveUserComment(commentParam);
+
+    @ApiOperation(value = "获取用户的回复")
+    @GetMapping("/comment/reply/get")
+    public ResultBean getUserReply(@RequestParam("replyId") String commentId){
+        return commentService.getReplyByCommentId(commentId);
+    }
+    @ApiOperation(value = "保存用户的评论或回复")
+    @PostMapping("/comment/save")
+    public ResultBean saveUserCommentOrReply(@RequestBody CommentParam commentParam){
+        return commentService.saveUserCommentOrReply(commentParam);
     }
 
     @ApiOperation(value = "删除用户的评论")
     @DeleteMapping("/comment/delete")
-    public ResultBean deleteUserComment(@RequestParam("commentId") String commentId,
-                                        @RequestParam("postId")String postId){
-        return commentService.deleteCommentByCommentId(commentId,postId);
+    public ResultBean deleteUserComment(@RequestParam("commentId") String commentId){
+        return commentService.deleteCommentByCommentId(commentId);
     }
 
     @ApiOperation(value = "更新用户的评论")

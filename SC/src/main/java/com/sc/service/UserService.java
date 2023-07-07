@@ -56,8 +56,6 @@ public interface UserService extends IService<User> {
      * @param pathDB
      * @return
      */
-    ResultBean updatePortrait(Integer id, String pathDB);
-
     /**
      * 用户修改信息（除头像）
      * @param userInfoUpdateParam

@@ -61,48 +61,9 @@ public class UserController {
         return user;
     }
 
-
-    @ApiOperation(value = "修改当前用户头像")
-    @PutMapping("/user/updatePortrait")
-    public ResultBean updatePortrait(@RequestParam("userId") Integer id,@RequestParam("file") MultipartFile file) throws Exception{
-
-        String pType = file.getContentType();
-        pType = pType.substring(pType.indexOf("/") + 1);
-        if ("jpeg".equals(pType)){
-            pType = "jpg";
-        }
-
-        Long time = System.currentTimeMillis();
-
-        // 文件保存的路径
-        String path = porPath +"User/"+"id_"+id+"/portrait/"+time+"_."+pType;
-//        System.out.println(path);
-
-        File outFile = new File(path);
-        if(outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()){
-            // 创建文件夹
-            outFile.getParentFile().mkdirs();
-        }
-        try {
-            // 将前端传递的文件保存到本地服务器路径下
-            file.transferTo(new File(path));
-
-            // 同步到数据库的路径
-            String pathDB = "http://" + ip + ":" + port + "/"+"User/"+"id_"+id+"/portrait/"+time+"_."+pType;
-//            System.out.println(pathDB);
-            return userService.updatePortrait(id,pathDB);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     @ApiOperation(value = "修改当前用户信息")
     @PutMapping("/user/updateUserinfo")
     public ResultBean updateUserinfo(@RequestBody UserInfoUpdateParam userInfoUpdateParam, HttpServletRequest request){
-
         return userService.updateUserinfo(userInfoUpdateParam);
     }
 

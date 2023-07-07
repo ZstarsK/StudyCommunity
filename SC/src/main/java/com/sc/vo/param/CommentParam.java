@@ -28,4 +28,7 @@ public class CommentParam {
 
     @ApiModelProperty("time")
     private int postTime;
+
+
+
 }

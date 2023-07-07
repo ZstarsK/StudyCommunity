@@ -146,16 +146,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param pathDB
      * @return
      */
-    @Override
-    public ResultBean updatePortrait(Integer id, String pathDB) {
 
-        this.update(Wrappers.lambdaUpdate(User.class).set(User::getAvatar,pathDB).eq(User::getUsername,id));
-
-        // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
-
-        return ResultBean.success("头像上传成功！");
-
-    }
 
     /**
      * 用户修改信息（除头像）

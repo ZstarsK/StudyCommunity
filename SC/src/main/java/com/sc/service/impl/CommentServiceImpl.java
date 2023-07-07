@@ -22,6 +22,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.sc.Util.DataUtil.*;
+
+
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
     @Autowired
@@ -31,24 +34,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private PostMapper postMapper;
 
     @Override
-    public Comment getCommentByCommentId(String commentId) {
-        return commentMapper.selectById(commentId);
-    }
-
-    @Override
     public ResultBean getCommentByPostId(String postId) {
-        List<Comment> comments;
-        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("postId", postId);
-        comments=commentMapper.selectList(queryWrapper);
-        return ResultBean.success("评论获取成功",comments);
+        return ResultBean.success("评论获取成功",commentMapper.selectList(
+                getQueried(Comment.class,"postId",postId)));
     }
 
     @Override
-    public ResultBean deleteCommentByCommentId(String commentId,String postId) {
-        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("commentId", commentId);
-        commentMapper.delete(queryWrapper);
+    public ResultBean deleteCommentByCommentId(String commentId) {
+        //删除评论
+        commentMapper.delete(getQueried(Comment.class,"commentId",commentId));
+        //删除对应回复
+        commentMapper.delete(getQueried(Comment.class,"reply",commentId));
 
         //将post表中对应commentId删除
 //        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
@@ -57,24 +53,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 //                .getCommentId().replaceFirst(";"+commentId,"");
 //        updateWrapper.set("commentId",updatedCommentId);
 //        postMapper.update(null,updateWrapper);
-        return ResultBean.success("评论删除成功");
+        return ResultBean.success("删除成功");
     }
 
     @Override
-    public ResultBean saveUserComment(CommentParam commentParam) {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String day = format.format(date);
-
-        Comment comment=new Comment();
-        //comment.setCommentId(commentParam.getCommentId());
-        comment.setPostId(comment.getPostId());
-        comment.setUsername(commentParam.getUsername());
-        comment.setDetail(commentParam.getDetail());
-        comment.setPostTime(day);
-        this.save(comment);
-
-//        //将commentId保存到post库中
+    public ResultBean saveUserCommentOrReply(CommentParam commentParam) {
+        //将commentId保存到post库中
 //        String postId=commentParam.getPostId();
 //        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
 //        updateWrapper.eq("postId", postId);
@@ -85,8 +69,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 //
 //        updateWrapper.set("commentId",commentId);
 //        postMapper.update(null,updateWrapper);
-
-        return ResultBean.success("评论发发布成功!",comment);
+        return ResultBean.success("发布成功!",saveValues(commentParam));
     }
 
     @Override
@@ -98,21 +81,32 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         updateWrapper.set("detail",commentParam.getDetail());
         commentMapper.update(null,updateWrapper);
 
-        return ResultBean.success("评论修改成功",getCommentByCommentId(commentId));
+        return ResultBean.success("评论修改成功",commentMapper.selectOne(updateWrapper));
     }
 
     @Override
-    public void saveUserReply(CommentParam commentParam) {
+    public ResultBean getReplyByCommentId(String commentId) {
+        return ResultBean.success("评论获取成功",commentMapper.selectList(
+                getQueried(Comment.class,"reply",commentId)));
+    }
+
+
+    @Override
+    public Comment saveValues(CommentParam commentParam) {
+        String commentId= commentParam.getCommentId();
+
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String day = format.format(date);
 
         Comment comment=new Comment();
-        comment.setCommentId(commentParam.getCommentId());
+        if (commentId!=null&&!commentId.isEmpty()) comment.setReply(commentParam.getCommentId());
         comment.setPostId(comment.getPostId());
         comment.setUsername(commentParam.getUsername());
         comment.setDetail(commentParam.getDetail());
         comment.setPostTime(day);
+
         this.save(comment);
+        return comment;
     }
 }

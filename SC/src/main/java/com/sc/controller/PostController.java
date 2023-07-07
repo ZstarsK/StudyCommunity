@@ -35,7 +35,7 @@ public class PostController {
     private GetUserByToken getUserByToken;
 
     @ApiOperation(value = "保存用户的动态")
-    @PutMapping("/post/save")
+    @PostMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
 //        MultipartFile imageFile=postParam.getImage();
 //        MultipartFile videoFile=postParam.getVideo();
@@ -55,11 +55,14 @@ public class PostController {
     @GetMapping("/home")
     public ResultBean getPostInfoByClassId(@RequestParam("token") String token){
         String clazzId = getUserByToken.getUserByToken(token).getClazzId();
-        return postService.getPostInfoByClazzId(clazzId);
+        if (clazzId!=null&&!clazzId.isEmpty()) return postService.getPostInfo(clazzId,true);
+        String username=getUserByToken.getUserByToken(token).getUsername();
+        if (username!=null&&!username.isEmpty()) return postService.getPostInfo(username,false);
+        return ResultBean.error("动态加载失败");
     }
 
     @ApiOperation(value = "更新动态信息")
-    @PostMapping("/post/update")
+    @PutMapping("/post/update")
     public ResultBean updatePostInfoById(@RequestBody PostParam postParam){
 
 //        MultipartFile imageFile=postParam.getImage();
@@ -71,7 +74,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "更新动态点赞信息")
-    @PostMapping("/post/likes/update")
+    @PutMapping("/post/likes/update")
     public int  updatePostInfoById(@RequestParam("postId") String postId,
                                          @RequestParam("likes") int likes){
         return postService.updateLikes(postId,likes);

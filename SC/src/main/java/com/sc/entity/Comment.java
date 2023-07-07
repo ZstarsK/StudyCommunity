@@ -41,6 +41,6 @@ public class Comment implements Serializable {
     private String postTime;
 
     @ApiModelProperty("reply")
-    @TableField("reply")
+    @TableField(value = "reply")
     private String reply;
 }

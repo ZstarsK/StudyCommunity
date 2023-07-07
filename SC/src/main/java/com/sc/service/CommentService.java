@@ -7,17 +7,23 @@ import com.sc.vo.param.CommentParam;
 import com.sc.vo.param.PostParam;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CommentService extends IService<Comment> {
-    Comment getCommentByCommentId(String commentId);
 
     ResultBean getCommentByPostId(String postId);
 
-    ResultBean deleteCommentByCommentId(String commentId,String postId);
+    ResultBean deleteCommentByCommentId(String commentId);
 
-    ResultBean saveUserComment(CommentParam commentParam);
+    ResultBean saveUserCommentOrReply(CommentParam commentParam);
 
     ResultBean updateCommentInfo(CommentParam commentParam);
 
-    void saveUserReply(CommentParam commentParam);
+    ResultBean getReplyByCommentId(String commentId);
+
+
+
+
+    Comment saveValues(CommentParam commentParam);
 }

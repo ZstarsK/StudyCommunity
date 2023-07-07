@@ -13,7 +13,7 @@ import java.util.List;
 public interface PostService extends IService<Post> {
     ResultBean getPostById(String postId);
 
-    ResultBean getPostInfoByClazzId(String clazzId);
+    ResultBean getPostInfo(String clazzId,boolean isHome);
 
     ResultBean deletePostById(String postId);
 

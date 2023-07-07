@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sc.entity.Comment;
 import com.sc.entity.Post;
+import com.sc.mapper.CommentMapper;
 import com.sc.mapper.PostMapper;
 import com.sc.service.PostService;
 import com.sc.vo.ResultBean;
@@ -16,12 +18,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static com.sc.Util.DataUtil.*;
 
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     @Autowired
     private CommentServiceImpl commentService;
@@ -39,20 +48,28 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public ResultBean getPostInfoByClazzId(String clazzId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("clazzId", clazzId);
-        /*queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("clazzId", clazzId);
-        List<Post> posts = postMapper.selectList(queryWrapper);*/
-        return ResultBean.success("动态加载成功",postMapper.selectList(queryWrapper));
+    public ResultBean getPostInfo(String queryField,boolean isHome) {
+        if (isHome) return ResultBean.success("动态加载成功",postMapper.selectList(
+                getQueried(Post.class,"clazzId",queryField)));
+        else return ResultBean.success("动态加载成功",postMapper.selectList(
+                getQueried(Post.class,"username",queryField)));
     }
 
     @Override
     public ResultBean deletePostById(String postId) {
-        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("postId", postId);
-        postMapper.delete(queryWrapper);
+        //删除服务器中的文件
+        deleteFile(postMapper.selectById(postId).getVideo());
+        deleteFile(postMapper.selectById(postId).getVideo());
+
+        postMapper.delete(getQueried(Post.class,"postId",postId));
+        //删除动态对应的评论和回复
+        List<Comment> list= commentMapper.selectList(
+                getQueried(Comment.class,"postId",postId));
+        for (Comment comment:list) commentService.deleteCommentByCommentId(comment.getCommentId());
+
+
+
+
         return ResultBean.success("删除成功");
     }
 
