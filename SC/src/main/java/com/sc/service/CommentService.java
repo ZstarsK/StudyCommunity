@@ -18,4 +18,6 @@ public interface CommentService extends IService<Comment> {
     ResultBean saveUserComment(CommentParam commentParam);
 
     ResultBean updateCommentInfo(CommentParam commentParam);
+
+    void saveUserReply(CommentParam commentParam);
 }

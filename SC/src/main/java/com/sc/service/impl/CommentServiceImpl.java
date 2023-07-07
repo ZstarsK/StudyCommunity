@@ -37,13 +37,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResultBean getCommentByPostId(String postId) {
-        List<Comment> comments=new ArrayList<>();
+        List<Comment> comments;
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("postId", postId);
-        String[] commentIds=commentMapper.selectOne(queryWrapper).getCommentId().split(";");
-        for (String s:commentIds){
-            comments.add(getCommentByCommentId(s));
-        }
+        comments=commentMapper.selectList(queryWrapper);
         return ResultBean.success("评论获取成功",comments);
     }
 
@@ -54,12 +51,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.delete(queryWrapper);
 
         //将post表中对应commentId删除
-        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("postId", postId);
-        String updatedCommentId= postMapper.selectOne(updateWrapper)
-                .getCommentId().replaceFirst(";"+commentId,"");
-        updateWrapper.set("commentId",updatedCommentId);
-        postMapper.update(null,updateWrapper);
+//        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("postId", postId);
+//        String updatedCommentId= postMapper.selectOne(updateWrapper)
+//                .getCommentId().replaceFirst(";"+commentId,"");
+//        updateWrapper.set("commentId",updatedCommentId);
+//        postMapper.update(null,updateWrapper);
         return ResultBean.success("评论删除成功");
     }
 
@@ -70,24 +67,24 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         String day = format.format(date);
 
         Comment comment=new Comment();
-        comment.setCommentId(commentParam.getCommentId());
+        //comment.setCommentId(commentParam.getCommentId());
         comment.setPostId(comment.getPostId());
         comment.setUsername(commentParam.getUsername());
         comment.setDetail(commentParam.getDetail());
         comment.setPostTime(day);
         this.save(comment);
 
-        //将commentId保存到post库中
-        String postId=commentParam.getPostId();
-        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("postId", postId);
-
-        StringBuilder commentId=new StringBuilder(postMapper
-                .selectById(postId).getCommentId());
-        commentId.append(";").append(commentParam.getCommentId());
-
-        updateWrapper.set("commentId",commentId);
-        postMapper.update(null,updateWrapper);
+//        //将commentId保存到post库中
+//        String postId=commentParam.getPostId();
+//        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("postId", postId);
+//
+//        StringBuilder commentId=new StringBuilder(postMapper
+//                .selectById(postId).getCommentId());
+//        commentId.append(";").append(commentParam.getCommentId());
+//
+//        updateWrapper.set("commentId",commentId);
+//        postMapper.update(null,updateWrapper);
 
         return ResultBean.success("评论发发布成功!",comment);
     }
@@ -102,5 +99,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.update(null,updateWrapper);
 
         return ResultBean.success("评论修改成功",getCommentByCommentId(commentId));
+    }
+
+    @Override
+    public void saveUserReply(CommentParam commentParam) {
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String day = format.format(date);
+
+        Comment comment=new Comment();
+        comment.setCommentId(commentParam.getCommentId());
+        comment.setPostId(comment.getPostId());
+        comment.setUsername(commentParam.getUsername());
+        comment.setDetail(commentParam.getDetail());
+        comment.setPostTime(day);
+        this.save(comment);
     }
 }

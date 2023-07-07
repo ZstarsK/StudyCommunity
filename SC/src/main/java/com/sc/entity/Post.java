@@ -47,13 +47,10 @@ public class Post implements Serializable {
     @ApiModelProperty("图片")
     @TableField("image")
     private String image;
+
     @ApiModelProperty("视频")
     @TableField("video")
     private String video;
-
-    @ApiModelProperty("评论")
-    @TableField("commentId")
-    private String commentId;
 
     @ApiModelProperty("赞数")
     @TableField("likes")

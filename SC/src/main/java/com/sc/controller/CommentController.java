@@ -18,7 +18,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @ApiOperation(value = "获取动态的评论")
+    @ApiOperation(value = "获取用户的评论")
     @GetMapping("/comment/get")
     public ResultBean getUserComment(@RequestParam("postId") String postId){
         return commentService.getCommentByPostId(postId);

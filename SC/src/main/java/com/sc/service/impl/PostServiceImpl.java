@@ -105,7 +105,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         int l=likes;
         UpdateWrapper<Post> updateWrapper=new UpdateWrapper<>();
         updateWrapper.eq("postId",postId);
-        updateWrapper.set("likes",l++);
+        updateWrapper.set("likes",++l);
         return l;
     }
 

@@ -37,11 +37,11 @@ public class PostController {
     @ApiOperation(value = "保存用户的动态")
     @PutMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
-        //MultipartFile imageFile=postParam.getImage();
-        //MultipartFile videoFile=postParam.getVideo();
-        //String postId = postParam.getPostId();
-        //if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
-        //if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
+//        MultipartFile imageFile=postParam.getImage();
+//        MultipartFile videoFile=postParam.getVideo();
+//        String postId = postParam.getPostId();
+//        if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
+//        if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
         return postService.saveUserPost(postParam);
     }
 
@@ -70,7 +70,7 @@ public class PostController {
         return postService.updatePostInfoById(postParam);
     }
 
-    @ApiOperation(value = "更新动态信息")
+    @ApiOperation(value = "更新动态点赞信息")
     @PostMapping("/post/likes/update")
     public int  updatePostInfoById(@RequestParam("postId") String postId,
                                          @RequestParam("likes") int likes){
@@ -78,7 +78,7 @@ public class PostController {
     }
     @ApiOperation(value="删除动态")
     @DeleteMapping("/post/delete")
-    public ResultBean deletePostById(@RequestBody String postId){
+    public ResultBean deletePostById(@RequestParam("postId") String postId){
         return postService.deletePostById(postId);
     }
 
