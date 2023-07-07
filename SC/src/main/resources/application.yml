@@ -49,7 +49,7 @@ jwt:
 
 
 # 动态图片服务器的配置信息
-portrait_storage:
+avatar_storage:
   ip: 47.97.218.237
   port: 8084
   path: /avatar/

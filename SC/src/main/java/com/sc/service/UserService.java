@@ -52,10 +52,12 @@ public interface UserService extends IService<User> {
 
     /**
      * 用户上传头像
-     * @param id
+     * @param username
      * @param pathDB
      * @return
      */
+    ResultBean updatePortrait(String username, String pathDB);
+
     /**
      * 用户修改信息（除头像）
      * @param userInfoUpdateParam

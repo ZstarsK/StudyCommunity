@@ -135,7 +135,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public String saveFile(MultipartFile file,String path,String postId) {
         String pType = getFileType(file);
-        String filePath = path + "/"+postId + pType;
+        String filePath = path+postId + "."+pType;
         File outFile = new File(filePath);
         if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
             outFile.getParentFile().mkdirs();
@@ -145,7 +145,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "http://" + ip + ":" + port + "/" + filePath;
+        return "http://" + ip + ":" + port + filePath;
     }
 
 

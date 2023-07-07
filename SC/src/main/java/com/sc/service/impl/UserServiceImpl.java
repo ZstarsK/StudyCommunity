@@ -3,7 +3,6 @@ package com.sc.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sc.Util.GetUserByToken;
 import com.sc.config.security.JwtTokenUtil;
 import com.sc.mapper.UserMapper;
 import com.sc.entity.User;
@@ -142,11 +141,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户上传头像
-     * @param id
+     * @param username
      * @param pathDB
      * @return
      */
+    @Override
+    public ResultBean updatePortrait(String username, String pathDB) {
 
+        this.update(Wrappers.lambdaUpdate(User.class).set(User::getAvatar,pathDB)
+                .eq(User::getUsername,username));
+
+        // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
+
+        return ResultBean.success("头像上传成功！");
+
+    }
 
     /**
      * 用户修改信息（除头像）
