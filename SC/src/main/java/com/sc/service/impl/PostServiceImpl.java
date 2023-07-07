@@ -1,6 +1,5 @@
 package com.sc.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.sc.Util.DataUtil.*;
@@ -136,62 +132,64 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         originFile.delete();
     }
 
-    //@Override
-    //public String saveFile(MultipartFile file,String path,String postId) {
-    //    String pType = getFileType(file);
-    //    String filePath = path + "/"+postId + pType;
-    //    File outFile = new File(filePath);
-    //    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-    //        outFile.getParentFile().mkdirs();
-    //    }
-    //    try {
-    //        file.transferTo(new File(filePath));
-    //    } catch (Exception e) {
-    //        e.printStackTrace();
-    //    }
-    //    return "http://" + ip + ":" + port + "/" + filePath;
-    //}
+    @Override
+    public String saveFile(MultipartFile file,String path,String postId) {
+        String pType = getFileType(file);
+        String filePath = path + "/"+postId + pType;
+        File outFile = new File(filePath);
+        if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
+            outFile.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(new File(filePath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "http://" + ip + ":" + port + "/" + filePath;
+    }
 
 
-    //@Override
-    //public String updateFile(String fullPath,String path, String postId) {
-    //    //用户第一次上传文件,fullPath=null;
-//
-    //    //用户非第一次上传文件
-    //     {
-    //        //fullPath="Http://ip:port/path/postId.pType";
-    //        //正则表达式，用于截取“/path/postId.pType”;
-    //        String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
-    //        File originFile = new File(filePath);
-    //        //动态之前包含文件，用户删除文件
-    //        if (originFile.exists()) {
-    //            if (file.isEmpty()) {
-    //                originFile.delete();
-    //                return null;
-    //            }
-    //        }
-    //        //用户修改文件
-    //        if (!file.isEmpty()) {
-    //            try {
-    //                file.transferTo(new File(filePath));
-    //                return fullPath;
-    //            } catch (Exception e) {
-    //                e.printStackTrace();
-    //            }
-    //        }
-    //    }
-    //    return null;
-    //}
+    @Override
+    public String updateFile(MultipartFile file, String fullPath, String path, String postId) {
+        //用户第一次上传文件,fullPath=null;
+        if (!file.isEmpty()&&fullPath.length()>0) {
+            saveFile(file,path,postId);
+        }
+        //用户非第一次上传文件
+         else{
+            //fullPath="Http://ip:port/path/postId.pType";
+            //正则表达式，用于截取“/path/postId.pType”;
+            String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+            File originFile = new File(filePath);
+            //动态之前包含文件，用户删除文件
+            if (originFile.exists()) {
+                if (file.isEmpty()) {
+                    originFile.delete();
+                    return null;
+                }
+            }
+            //用户修改文件
+            if (!file.isEmpty()) {
+                try {
+                    file.transferTo(new File(filePath));
+                    return fullPath;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 
-    //@Override
-    //public String getFileType(MultipartFile file) {
-    //    String pType = file.getContentType();
-    //    pType = pType.substring(pType.indexOf("/") + 1);
-    //    if ("jpeg".equals(pType)) {
-    //        pType = "jpg";
-    //    }
-    //    return pType;
-    //}
+    @Override
+    public String getFileType(MultipartFile file) {
+        String pType = file.getContentType();
+        pType = pType.substring(pType.indexOf("/") + 1);
+        if ("jpeg".equals(pType)) {
+            pType = "jpg";
+        }
+        return pType;
+    }
 
 
 }
