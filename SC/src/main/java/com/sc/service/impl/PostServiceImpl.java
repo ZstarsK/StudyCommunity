@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sc.entity.Comment;
 import com.sc.entity.Post;
+import com.sc.entity.User;
 import com.sc.mapper.CommentMapper;
 import com.sc.mapper.PostMapper;
+import com.sc.mapper.UserMapper;
 import com.sc.service.PostService;
 import com.sc.vo.ResultBean;
 import com.sc.vo.param.PostParam;
@@ -30,6 +32,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Autowired
     private CommentServiceImpl commentService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Value("${pic_storage.ip}")
     private String ip;
@@ -145,7 +150,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "http://" + ip + ":" + port + filePath;
+        String url="http://" + ip + ":" + port + "/Pic/avatar/" + postId + "."+pType;
+        UpdateWrapper<User> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("username",postId);
+        updateWrapper.set("avatar",url);
+        userMapper.update(null,updateWrapper);
+        System.out.println(url);
+        return url;
     }
 
 

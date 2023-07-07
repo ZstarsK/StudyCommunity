@@ -7,6 +7,7 @@ import com.sc.vo.param.PostParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,9 +26,9 @@ public interface PostService extends IService<Post> {
 
     void deleteFile(String path);
 
-    String saveFile(MultipartFile file, String path, String postId);
+    String saveFile(MultipartFile file, String path, String postId) throws IOException;
 
-    String updateFile(MultipartFile file, String fullPath, String path, String postId);
+    String updateFile(MultipartFile file, String fullPath, String path, String postId) throws IOException;
 
     String getFileType(MultipartFile file);
 

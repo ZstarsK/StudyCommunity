@@ -37,13 +37,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Value("${portrait_storage.ip}")
+    @Value("${avatar_storage.ip}")
     private String ip;
 
-    @Value("${portrait_storage.port}")
+    @Value("${avatar_storage.port}")
     private String port;
 
-    @Value("${portrait_storage.path}")
+    @Value("${avatar_storage.path}")
     private String porPath;
 
     @Autowired

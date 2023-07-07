@@ -50,19 +50,19 @@ jwt:
 
 # 动态图片服务器的配置信息
 avatar_storage:
-  ip: 47.97.218.237
+  ip: 1.117.52.175
   port: 8084
-  path: /avatar/
+  path: /StudyCommunity/avatar/
 
 # 动态图片服务器的配置信息
 pic_storage:
-  ip: 47.97.218.237
+  ip: 1.117.52.175
   port: 8084
-  path: /picture/
+  path: /StudyCommunity/picture/
 
 # 视频服务器的配置信息
 vid_storage:
-  ip: 47.97.218.237
+  ip: 1.117.52.175
   port: 8084
-  path: /video/
+  path: /StudyCommunity/video/
 

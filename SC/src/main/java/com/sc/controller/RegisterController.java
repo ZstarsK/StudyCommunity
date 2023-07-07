@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
  * 注册
@@ -53,7 +54,7 @@ public class RegisterController {
     }
     @ApiOperation(value = "上传注册图片")
     @PostMapping("/common/register/upload")
-    public ResultBean registerUpload(@RequestParam("username") String username,@RequestParam("file") MultipartFile file){
+    public ResultBean registerUpload(@RequestParam("username") String username,@RequestParam("file") MultipartFile file) throws IOException {
         return ResultBean.success("头像上传成功", postService.saveFile(file,avtPath,username));
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Api(tags = "PostController")
@@ -36,7 +37,7 @@ public class PostController {
 
     @ApiOperation(value = "保存用户的动态")
     @PostMapping("/post/save")
-    public ResultBean saveUserPost(@RequestBody PostParam postParam){
+    public ResultBean saveUserPost(@RequestBody PostParam postParam) throws IOException {
         System.out.println("run");
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
@@ -64,7 +65,7 @@ public class PostController {
 
     @ApiOperation(value = "更新动态信息")
     @PutMapping("/post/update")
-    public ResultBean updatePostInfoById(@RequestBody PostParam postParam){
+    public ResultBean updatePostInfoById(@RequestBody PostParam postParam) throws IOException {
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
         String postId = postParam.getPostId();
