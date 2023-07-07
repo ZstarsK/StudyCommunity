@@ -75,9 +75,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResultBean saveUserPost(PostParam postParam) {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String day = format.format(date);
+//        Date date = new Date();
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String day = format.format(date);
 
         Post post=new Post();
         post.setPostId(postParam.getPostId());
@@ -87,7 +87,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         post.setDetail(postParam.getPostContent());
         post.setImage(postParam.getImagePath());
         post.setVideo(postParam.getVideoPath());
-        post.setPostTime(day);
+        post.setPostTime(postParam.getPostTime());
         post.setLikes(postParam.getLikes());
 
         this.save(post);
@@ -111,6 +111,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
                 .eq(Post::getPostId,postParam.getPostId()));
+        this.update(Wrappers.lambdaUpdate(post).set(Post::getPostTime,postParam.getPostTime())
+                .eq(Post::getPostId,postParam.getPostId()));
         this.update(Wrappers.lambdaUpdate(post).set(Post::getLikes,postParam.getLikes())
                 .eq(Post::getPostId,postParam.getPostId()));
 
@@ -123,6 +125,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         UpdateWrapper<Post> updateWrapper=new UpdateWrapper<>();
         updateWrapper.eq("postId",postId);
         updateWrapper.set("likes",++l);
+        postMapper.update(null,updateWrapper);
         return l;
     }
 

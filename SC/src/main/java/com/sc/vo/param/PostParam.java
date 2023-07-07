@@ -24,6 +24,6 @@ public class PostParam {
     private String imagePath;
     private MultipartFile video;
     private String videoPath;
-    private String commentsId;
+    private String postTime;
     private int likes;
 }

@@ -95,16 +95,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public Comment saveValues(CommentParam commentParam) {
         String commentId= commentParam.getCommentId();
 
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String day = format.format(date);
+//        Date date = new Date();
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String day = format.format(date);
 
         Comment comment=new Comment();
         if (commentId!=null&&!commentId.isEmpty()) comment.setReply(commentParam.getCommentId());
         comment.setPostId(comment.getPostId());
         comment.setUsername(commentParam.getUsername());
         comment.setDetail(commentParam.getDetail());
-        comment.setPostTime(day);
+        comment.setPostTime(commentParam.getPostTime());
 
         this.save(comment);
         return comment;
