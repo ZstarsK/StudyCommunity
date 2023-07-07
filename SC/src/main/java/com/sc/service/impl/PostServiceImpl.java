@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import static com.sc.Util.DataUtil.*;
@@ -50,16 +51,22 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResultBean getPostInfo(String queryField,boolean isHome) {
-        if (isHome) return ResultBean.success("动态加载成功",postMapper.selectList(
-                getQueried(Post.class,"clazzId",queryField)));
-        else return ResultBean.success("动态加载成功",postMapper.selectList(
-                getQueried(Post.class,"username",queryField)));
+
+        List<Post> list;
+        if (isHome){
+            list = postMapper.selectList(getQueried(Post.class, "clazzId", queryField));
+        }
+        else {
+            list = postMapper.selectList(getQueried(Post.class, "username", queryField));
+        }
+        Collections.reverse(list);
+        return ResultBean.success("动态加载成功",list);
     }
 
     @Override
     public ResultBean deletePostById(String postId) {
         //删除服务器中的文件
-        deleteFile(postMapper.selectById(postId).getVideo());
+        deleteFile(postMapper.selectById(postId).getImage());
         deleteFile(postMapper.selectById(postId).getVideo());
 
         postMapper.delete(getQueried(Post.class,"postId",postId));
@@ -68,19 +75,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 getQueried(Comment.class,"postId",postId));
         for (Comment comment:list) commentService.deleteCommentByCommentId(comment.getCommentId());
 
-
-
-
         return ResultBean.success("删除成功");
     }
 
     @Override
     public ResultBean saveUserPost(PostParam postParam) {
-//        Date date = new Date();
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String day = format.format(date);
-
         Post post=new Post();
+
         post.setPostId(postParam.getPostId());
         post.setUsername(postParam.getUsername());
         post.setClazzId(postParam.getClassId());
@@ -101,8 +102,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         Post post=postMapper.selectById(postParam.getPostId());
 
-        if (postParam.getImagePath()==null)deleteFile(post.getImage());
-        if (postParam.getVideoPath()==null)deleteFile(post.getVideo());
+//        if (postParam.getImagePath()==null||postParam.getImagePath().isEmpty())deleteFile(post.getImage());
+//        if (postParam.getVideoPath()==null||postParam.getVideoPath().isEmpty())deleteFile(post.getVideo());
+
 
         this.update(Wrappers.lambdaUpdate(post).set(Post::getDetail,postParam.getPostContent())
                 .eq(Post::getPostId,postParam.getPostId()));
@@ -122,55 +124,33 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public int updateLikes(String postId,int likes) {
-        int l=likes;
-        UpdateWrapper<Post> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("postId",postId);
-        updateWrapper.set("likes",++l);
-        postMapper.update(null,updateWrapper);
+        int l=++likes;
+        postMapper.update(null,getUpdated(Post.class,"postId",
+                postId,"likes",l));
         return l;
     }
 
     @Override
     public void deleteFile(String fullPath) {
-        String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+        int index = fullPath.indexOf("/pic/") + 5;
+        String filePath ="/StudyCommunity/"+ fullPath.substring(index);
         File originFile = new File(filePath);
         originFile.delete();
     }
 
     @Override
-    public String saveFile(MultipartFile file,String path,String postId) {
-        String pType = getFileType(file);
-        String filePath = path+postId + "."+pType;
-        File outFile = new File(filePath);
-        if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-            outFile.getParentFile().mkdirs();
-        }
-        try {
-            file.transferTo(new File(filePath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String url="http://" + ip + ":" + port + "/Pic/avatar/" + postId + "."+pType;
-        UpdateWrapper<User> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("username",postId);
-        updateWrapper.set("avatar",url);
-        userMapper.update(null,updateWrapper);
-        System.out.println(url);
-        return url;
-    }
-
-
-    @Override
     public String updateFile(MultipartFile file, String fullPath, String path, String postId) {
         //用户第一次上传文件,fullPath=null;
         if (!file.isEmpty()&&fullPath.length()>0) {
-            saveFile(file,path,postId);
+            saveFiles(file,path,postId);
         }
         //用户非第一次上传文件
          else{
-            //fullPath="Http://ip:port/path/postId.pType";
-            //正则表达式，用于截取“/path/postId.pType”;
-            String filePath = fullPath.replaceAll(".*?(/.*)", "$1");
+            //fullPath="Http://ip:port/pic/path/postId.pType";
+            //正则表达式，用于截取“path/postId.pType”;
+
+            int index = fullPath.indexOf("/pic/") + 5;
+            String filePath ="/StudyCommunity/"+ fullPath.substring(index);
             File originFile = new File(filePath);
             //动态之前包含文件，用户删除文件
             if (originFile.exists()) {
@@ -183,7 +163,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             if (!file.isEmpty()) {
                 try {
                     file.transferTo(new File(filePath));
-                    return fullPath;
+                    return filePath;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -192,15 +172,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return null;
     }
 
-    @Override
-    public String getFileType(MultipartFile file) {
-        String pType = file.getContentType();
-        pType = pType.substring(pType.indexOf("/") + 1);
-        if ("jpeg".equals(pType)) {
-            pType = "jpg";
-        }
-        return pType;
-    }
+
 
 
 }

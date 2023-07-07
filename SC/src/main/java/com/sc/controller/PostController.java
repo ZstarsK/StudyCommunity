@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import static com.sc.Util.DataUtil.*;
 
 @Api(tags = "PostController")
 @RestController
@@ -42,8 +42,8 @@ public class PostController {
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
         String postId = postParam.getPostId();
-        if (!imageFile.isEmpty()) postParam.setImagePath(postService.saveFile(imageFile,picPath,postId));
-        if (!videoFile.isEmpty()) postParam.setVideoPath(postService.saveFile(videoFile,vidPath,postId));
+        if (!imageFile.isEmpty()) postParam.setImagePath(saveFiles(imageFile,picPath,postId));
+        if (!videoFile.isEmpty()) postParam.setVideoPath(saveFiles(videoFile,vidPath,postId));
         return postService.saveUserPost(postParam);
     }
 
@@ -58,6 +58,12 @@ public class PostController {
     public ResultBean getPostInfoByClassId(@RequestParam("token") String token){
         String clazzId = getUserByToken.getUserByToken(token).getClazzId();
         if (clazzId!=null&&!clazzId.isEmpty()) return postService.getPostInfo(clazzId,true);
+        return ResultBean.error("动态加载失败");
+    }
+
+    @ApiOperation(value = "获取某个用户的动态信息")
+    @GetMapping("/user/post")
+    public ResultBean getPostInfoByUserName(@RequestParam("token") String token){
         String username=getUserByToken.getUserByToken(token).getUsername();
         if (username!=null&&!username.isEmpty()) return postService.getPostInfo(username,false);
         return ResultBean.error("动态加载失败");

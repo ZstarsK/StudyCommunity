@@ -26,6 +26,9 @@ public class CommentParam {
     @ApiModelProperty("文章")
     private String detail;
 
+    @ApiModelProperty("回复")
+    private String reply;
+
     @ApiModelProperty("time")
     private String postTime;
 
