@@ -37,6 +37,7 @@ public class PostController {
     @ApiOperation(value = "保存用户的动态")
     @PostMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam){
+        System.out.println("run");
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
         String postId = postParam.getPostId();
@@ -64,7 +65,6 @@ public class PostController {
     @ApiOperation(value = "更新动态信息")
     @PutMapping("/post/update")
     public ResultBean updatePostInfoById(@RequestBody PostParam postParam){
-
         MultipartFile imageFile=postParam.getImage();
         MultipartFile videoFile=postParam.getVideo();
         String postId = postParam.getPostId();
@@ -75,9 +75,8 @@ public class PostController {
 
     @ApiOperation(value = "更新动态点赞信息")
     @PutMapping("/post/likes/update")
-    public int  updatePostInfoById(@RequestParam("postId") String postId,
-                                         @RequestParam("likes") int likes){
-        return postService.updateLikes(postId,likes);
+    public int  updatePostLikes(@RequestBody PostParam postParam){
+        return postService.updateLikes(postParam.getPostId(),postParam.getLikes());
     }
     @ApiOperation(value="删除动态")
     @DeleteMapping("/post/delete")
