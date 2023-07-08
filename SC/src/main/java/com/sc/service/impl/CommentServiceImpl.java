@@ -57,11 +57,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return ResultBean.success("评论修改成功",commentMapper.selectOne(updateWrapper));
     }
 
-    @Override
-    public ResultBean getReplyByCommentId(String commentId) {
-        return ResultBean.success("评论获取成功",commentMapper.selectList(
-                getQueried(Comment.class,"reply",commentId)));
-    }
+//    @Override
+//    public ResultBean getReplyByCommentId(String commentId) {
+//        return ResultBean.success("评论获取成功",commentMapper.selectList(
+//                getQueried(Comment.class,"reply",commentId)));
+//    }
 
 
     @Override

@@ -20,7 +20,7 @@ public interface CommentService extends IService<Comment> {
 
     ResultBean updateCommentInfo(CommentParam commentParam);
 
-    ResultBean getReplyByCommentId(String commentId);
+    //ResultBean getReplyByCommentId(String commentId);
 
 
 

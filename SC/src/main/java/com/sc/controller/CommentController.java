@@ -24,11 +24,11 @@ public class CommentController {
         return commentService.getCommentByPostId(postId);
     }
 
-    @ApiOperation(value = "获取用户的回复")
-    @GetMapping("/comment/reply/get")
-    public ResultBean getUserReply(@RequestParam("replyId") String commentId){
-        return commentService.getReplyByCommentId(commentId);
-    }
+//    @ApiOperation(value = "获取用户的回复")
+//    @GetMapping("/comment/reply/get")
+//    public ResultBean getUserReply(@RequestParam("replyId") String commentId){
+//        return commentService.getReplyByCommentId(commentId);
+//    }
     @ApiOperation(value = "保存用户的评论或回复")
     @PostMapping("/comment/save")
     public ResultBean saveUserCommentOrReply(@RequestBody CommentParam commentParam){
