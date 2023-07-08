@@ -20,10 +20,12 @@ public interface PostService extends IService<Post> {
 
     ResultBean saveUserPost(PostParam postParam);
 
+    String savePostUrl(String url);
+
     ResultBean updatePostInfoById(PostParam postParam);
 
 
-    void saveAndUpdateUrl(String tableField, String url, String postId);
+    void updateUrl(String tableField, String url, String postId);
 
     int updateLikes(String postId, int likes);
 

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 public class DataUtil {
     //获取对应表中的查询包装器
@@ -30,9 +31,21 @@ public class DataUtil {
 
     //保存文件到服务器
     public static String saveFiles( MultipartFile file, String path,String fileName) {
-        //获取保存到服务器的路径并保存
+        String filePath,alterFileName;
         String pType = getFileType(file);
-        String filePath = path+fileName + "."+pType;
+        //用户先传图片再传其他信息,需要自己生成文件名
+        if (fileName==null||fileName.isEmpty()) {
+            alterFileName = UUID.randomUUID().toString();
+            //"D:/"+alterFileName + "." + pType;
+            filePath = path + alterFileName + "." + pType;
+        }
+        //用户先传其他信息，获取保存到服务器的路径并保存
+        else{
+            filePath = path + fileName + "." + pType;
+            alterFileName=fileName;
+        }
+        System.out.println(filePath);
+
         try {
             file.transferTo(new File(filePath));
         } catch (Exception e) {
@@ -40,9 +53,11 @@ public class DataUtil {
         }
 
         //获取输送给前端的url
-        String urlPath=path.substring(path.indexOf("/")+1);
+        String urlPath=path.substring(path.indexOf("/")+16);
 
-        return "http://" + "1.117.52.175:3306" + "/Pic/"+urlPath + fileName + "."+pType;
+        return "http://" + "1.117.52.175:3306" + "/Pic/"+urlPath + alterFileName + "."+pType;
+
+
     }
     //更新文件
     public static String updatePostFile(MultipartFile file, String fullPath, String path, String fileName) {
@@ -82,11 +97,7 @@ public class DataUtil {
     //获取文件类型
     public static String getFileType(MultipartFile file) {
         String pType = file.getContentType();
-        pType = pType.substring(pType.indexOf("/") + 1);
-        if ("jpeg".equals(pType)) {
-            pType = "jpg";
-        }
-        return pType;
+        return pType.substring(pType.indexOf("/") + 1);
     }
 
 

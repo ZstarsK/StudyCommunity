@@ -14,7 +14,6 @@ import com.sc.vo.param.PostParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Collections;
@@ -79,15 +78,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResultBean saveUserPost(PostParam postParam) {
+
         Post post=new Post();
 
-        post.setPostId(postParam.getPostId());
         post.setUsername(postParam.getUsername());
-        post.setClazzId(postParam.getClassId());
+        post.setClazzId(postParam.getClazzId());
         post.setTitle(postParam.getTitle());
-        post.setDetail(postParam.getPostContent());
-        post.setImage(postParam.getImagePath());
-        post.setVideo(postParam.getVideoPath());
+        post.setDetail(postParam.getDetail());
+        post.setImage(postParam.getImage());
+        //post.setVideo(postParam.getVideoPath());
         post.setPostTime(postParam.getPostTime());
         post.setLikes(postParam.getLikes());
 
@@ -97,43 +96,56 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public ResultBean updatePostInfoById(PostParam postParam) {
+    public String savePostUrl(String url) {
+        Post post=new Post();
+        post.setImage(url);
+        postMapper.insert(post);
+        return postMapper.selectOne(getQueried(Post.class,"image",url)).getPostId();
+    }
 
-        Post post=postMapper.selectById(postParam.getPostId());
+    @Override
+    public ResultBean updatePostInfoById(PostParam postParam) {
+        String postId=postParam.getPostId();
+        Post post=postMapper.selectById(postId);
 
 //        if (postParam.getImagePath()==null||postParam.getImagePath().isEmpty())deleteFile(post.getImage());
 //        if (postParam.getVideoPath()==null||postParam.getVideoPath().isEmpty())deleteFile(post.getVideo());
+        this.update(getUpdated(Post.class,"postId",postId,
+                "title",postParam.getTitle()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "detail",postParam.getDetail()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "username",postParam.getUsername()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "clazzId",postParam.getClazzId()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "image",postParam.getImage()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "postTime",postParam.getPostTime()));
+        this.update(getUpdated(Post.class, "postId",postId,
+                "likes",postParam.getLikes()));
 
 
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getDetail,postParam.getPostContent())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getTitle,postParam.getTitle())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getImage,postParam.getImagePath())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getPostTime,postParam.getPostTime())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getLikes,postParam.getLikes())
-                .eq(Post::getPostId,postParam.getPostId()));
+
+
+//        this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
+//                .eq(Post::getPostId,postParam.getPostId()));
+
 
         return ResultBean.success("动态更新成功",post);
     }
 
     @Override
-    public void saveAndUpdateUrl(String tableField, String url, String postId) {
-
+    public void updateUrl(String tableField, String url, String postId) {
         this.update(new UpdateWrapper<Post>().set("tableField",url).eq("postId",postId));
         // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
 
     }
     @Override
     public int updateLikes(String postId,int likes) {
-        int l=++likes;
         postMapper.update(null,getUpdated(Post.class,"postId",
-                postId,"likes",l));
-        return l;
+                postId,"likes", likes));
+        return likes;
     }
 
     @Override

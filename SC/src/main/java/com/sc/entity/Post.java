@@ -24,7 +24,7 @@ public class Post implements Serializable {
     @TableId(value = "postId", type = IdType.AUTO)
     private String postId;
 
-    @ApiModelProperty("评论者手机")
+    @ApiModelProperty("评论者用户名")
     @TableField("username")
     private String username;
 

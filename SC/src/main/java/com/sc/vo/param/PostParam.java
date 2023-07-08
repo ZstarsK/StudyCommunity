@@ -17,13 +17,11 @@ public class PostParam {
 
     private String postId;
     private String username;
-    private String classId;
+    private String clazzId;
     private String title;
-    private String postContent;
-    private MultipartFile image;
-    private String imagePath;
-    private MultipartFile video;
-    private String videoPath;
+    private String detail;
+    private String image;
+    //private String video;
     private String postTime;
     private int likes;
 }
