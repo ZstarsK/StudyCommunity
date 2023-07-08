@@ -22,13 +22,16 @@ public interface PostService extends IService<Post> {
 
     ResultBean updatePostInfoById(PostParam postParam);
 
-    int updateLikes(String postId,int likes);
+
+    void saveAndUpdateUrl(String tableField, String url, String postId);
+
+    int updateLikes(String postId, int likes);
 
     void deleteFile(String path);
 
 
 
-    String updateFile(MultipartFile file, String fullPath, String path, String postId) throws IOException;
+
 
 
 

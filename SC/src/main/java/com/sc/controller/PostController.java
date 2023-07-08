@@ -35,15 +35,9 @@ public class PostController {
     @Autowired
     private GetUserByToken getUserByToken;
 
-    @ApiOperation(value = "保存用户的动态")
+    @ApiOperation(value = "保存用户的动态（除文件）")
     @PostMapping("/post/save")
     public ResultBean saveUserPost(@RequestBody PostParam postParam) throws IOException {
-        System.out.println("run");
-        MultipartFile imageFile=postParam.getImage();
-        MultipartFile videoFile=postParam.getVideo();
-        String postId = postParam.getPostId();
-        if (!imageFile.isEmpty()) postParam.setImagePath(saveFiles(imageFile,picPath,postId));
-        if (!videoFile.isEmpty()) postParam.setVideoPath(saveFiles(videoFile,vidPath,postId));
         return postService.saveUserPost(postParam);
     }
 
@@ -72,12 +66,17 @@ public class PostController {
     @ApiOperation(value = "更新动态信息")
     @PutMapping("/post/update")
     public ResultBean updatePostInfoById(@RequestBody PostParam postParam) throws IOException {
-        MultipartFile imageFile=postParam.getImage();
-        MultipartFile videoFile=postParam.getVideo();
-        String postId = postParam.getPostId();
-        postParam.setImagePath(postService.updateFile(imageFile,postParam.getImagePath(),picPath,postId));
-        postParam.setVideoPath(postService.updateFile(videoFile,postParam.getVideoPath(),vidPath,postId));
         return postService.updatePostInfoById(postParam);
+    }
+
+    @ApiOperation(value = "保存或更新用户动态里的文件")
+    @PostMapping("/post/file/update")
+    public ResultBean saveAndUpdatePostFile(@RequestParam("postId") String postId,@RequestParam("url") String url,
+                                     @RequestParam("file") MultipartFile file) throws IOException {
+
+        postService.saveAndUpdateUrl("image",updatePostFile(file,url,picPath,postId),postId);
+        return ResultBean.success("头像上传成功");
+
     }
 
     @ApiOperation(value = "更新动态点赞信息")

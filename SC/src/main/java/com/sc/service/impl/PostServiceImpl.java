@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sc.entity.Comment;
 import com.sc.entity.Post;
-import com.sc.entity.User;
 import com.sc.mapper.CommentMapper;
 import com.sc.mapper.PostMapper;
 import com.sc.mapper.UserMapper;
@@ -123,6 +122,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    public void saveAndUpdateUrl(String tableField, String url, String postId) {
+
+        this.update(new UpdateWrapper<Post>().set("tableField",url).eq("postId",postId));
+        // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
+
+    }
+    @Override
     public int updateLikes(String postId,int likes) {
         int l=++likes;
         postMapper.update(null,getUpdated(Post.class,"postId",
@@ -138,39 +144,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         originFile.delete();
     }
 
-    @Override
-    public String updateFile(MultipartFile file, String fullPath, String path, String postId) {
-        //用户第一次上传文件,fullPath=null;
-        if (!file.isEmpty()&&fullPath.length()>0) {
-            saveFiles(file,path,postId);
-        }
-        //用户非第一次上传文件
-         else{
-            //fullPath="Http://ip:port/pic/path/postId.pType";
-            //正则表达式，用于截取“path/postId.pType”;
 
-            int index = fullPath.indexOf("/pic/") + 5;
-            String filePath ="/StudyCommunity/"+ fullPath.substring(index);
-            File originFile = new File(filePath);
-            //动态之前包含文件，用户删除文件
-            if (originFile.exists()) {
-                if (file.isEmpty()) {
-                    originFile.delete();
-                    return null;
-                }
-            }
-            //用户修改文件
-            if (!file.isEmpty()) {
-                try {
-                    file.transferTo(new File(filePath));
-                    return filePath;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
+
 
 
 
