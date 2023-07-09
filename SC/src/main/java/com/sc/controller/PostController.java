@@ -53,7 +53,6 @@ public class PostController {
     public ResultBean savePostFile(@RequestParam("postId") String postId,
                                             @RequestParam("file") MultipartFile file) throws IOException {
         //用户上传图片后数据库插入记录并返回postId
-        System.out.println(postId);
         String url=saveFiles(file,picPath,postId);
         String[] urlAndPostId={url,postService.savePostUrl(url)};
         return ResultBean.success("动态更新成功",urlAndPostId);
@@ -75,8 +74,7 @@ public class PostController {
 
     @ApiOperation(value = "获取某个用户的动态信息")
     @GetMapping("/user/post")
-    public ResultBean getPostInfoByUserName(@RequestParam("token") String token){
-        String username=getUserByToken.getUserByToken(token).getUsername();
+    public ResultBean getPostInfoByUserName(@RequestParam("username") String username){
         if (username!=null&&!username.isEmpty()) return postService.getPostInfo(username,false);
         return ResultBean.error("动态加载失败");
     }

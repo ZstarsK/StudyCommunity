@@ -64,8 +64,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResultBean deletePostById(String postId) {
         //删除服务器中的文件
-        deleteFile(postMapper.selectById(postId).getImage());
-        deleteFile(postMapper.selectById(postId).getVideo());
+        String imagePath=postMapper.selectById(postId).getImage();
+        String videoPath=postMapper.selectById(postId).getVideo();
+        System.out.println(imagePath);
+        if(imagePath!=null&&!imagePath.isEmpty()) deleteFile(imagePath);
+        if(videoPath!=null&&!videoPath.isEmpty()) deleteFile(videoPath);
 
         postMapper.delete(getQueried(Post.class,"postId",postId));
         //删除动态对应的评论和回复

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import static com.sc.Util.DataUtil.*;
 
 /**
  * <p>
@@ -182,12 +183,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResultBean getUserinfoById(String username) {
-        User user = userMapper.selectOne(
-                new LambdaQueryWrapper<User>()
-                        .eq(User::getUsername, username)
-        );
+        User user = userMapper.selectOne(getQueried(User.class,"username",username));
         user.setPassword(null);
         return ResultBean.success("用户信息获取成功",user);
+
     }
 
 
