@@ -19,7 +19,7 @@ public class UserInfoUpdateParam {
     private Integer id;
 
     @ApiModelProperty(value = "用户昵称",required = true)
-    private String nickname;
+    private String name;
 
     @ApiModelProperty(value = "用户性别",required = true)
     private String gender;

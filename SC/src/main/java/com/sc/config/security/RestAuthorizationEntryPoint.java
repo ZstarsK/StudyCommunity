@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * 当未登录时或者token失效时访问接口，自定义的返回结果
- */
+
 @Component
 public class RestAuthorizationEntryPoint implements AuthenticationEntryPoint {
 

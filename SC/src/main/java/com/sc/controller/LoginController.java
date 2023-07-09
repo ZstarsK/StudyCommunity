@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * 登录
- */
 @Api(tags = "LoginController")
 @RestController
 public class LoginController {

@@ -20,9 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import static com.sc.Util.DataUtil.*;
 
-/**
- * 注册
- */
+
 
 @Api(tags = "RegisterController")
 @RestController

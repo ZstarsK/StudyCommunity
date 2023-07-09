@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * 访问接口没有权限时，自定义返回结果
- */
+
 @Component
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
 

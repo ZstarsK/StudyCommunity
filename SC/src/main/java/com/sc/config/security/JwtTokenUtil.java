@@ -24,11 +24,7 @@ public class JwtTokenUtil {
     private Long expiration;
 
 
-    /**
-     * 根据用户信息生成token
-     * @param userDetails
-     * @return
-     */
+
 
     public String generateToken(UserDetails userDetails){
         Map<String,Object> claims = new HashMap<>();
@@ -38,11 +34,7 @@ public class JwtTokenUtil {
     }
 
 
-    /**
-     * 从token 中获取登录用户的手机号码
-     * @param token
-     * @return
-     */
+
     public String getUsernameFromToken(String token){
         String username;
         try {
@@ -54,62 +46,37 @@ public class JwtTokenUtil {
         return username;
     }
 
-    /**
-     * 验证token 是否有效
-     * @param token
-     * @param userDetails
-     * @return
-     */
+
     public boolean validateToken(String token,UserDetails userDetails){
         String username = getUsernameFromToken(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    /**
-     * 判断token是否可以被刷新
-     * @param token
-     * @return
-     */
+
     public boolean canRefresh(String token){
         return !isTokenExpired(token);
     }
 
-    /**
-     *  刷新 token
-     * @param token
-     * @return
-     */
+
     public String refreshToken(String token){
         Claims claims = getClaimsFromToken(token);
         claims.put(CLAIM_KEY_CREATED,new Date());
         return generateToken(claims);
     }
 
-    /**
-     * 判断token 是否失效
-     * @param token
-     * @return
-     */
+
     private boolean isTokenExpired(String token) {
         Date expiredDate = getExpiredDateFromToken(token);
         return expiredDate.before(new Date());
     }
 
-    /**
-     * 从 token中获取失效时间
-     * @param token
-     * @return
-     */
+
     private Date getExpiredDateFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         return claims.getExpiration();
     }
 
-    /**
-     * 从 token 中获取 payload 荷载
-     * @param token
-     * @return
-     */
+
     private Claims getClaimsFromToken(String token) {
         Claims claims = null;
         try {
@@ -124,11 +91,7 @@ public class JwtTokenUtil {
     }
 
 
-    /**
-     * 根据荷载生成JWT TOKEN
-     * @param claims
-     * @return
-     */
+
     private String generateToken(Map<String,Object> claims){
         return Jwts.builder()
                 .setClaims(claims)
@@ -137,10 +100,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    /**
-     * 生成token失效时间
-     * @return
-     */
+
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }

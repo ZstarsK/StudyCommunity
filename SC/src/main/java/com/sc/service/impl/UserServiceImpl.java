@@ -25,14 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import static com.sc.Util.DataUtil.*;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author jingchao
- * @since 2022/04/16 20:18
- */
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -51,59 +44,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResultBean login(String username, String password, HttpServletRequest request) {
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        User user = userMapper.selectOne(
-                new LambdaQueryWrapper<User>()
-                        .eq(User::getUsername, username));//从手机号获取整个user信息
+        User user = getUserByUsername(username);
 
         if (user != null && passwordEncoder.matches(password,user.getPassword())){
 
-            //更新security 登录用户对象
-            UsernamePasswordAuthenticationToken authenticationToken = new
-                    UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            return ResultBean.success("登录成功",generateTokenMap(username));
 
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            // 生成token
-            String token = jwtTokenUtil.generateToken(userDetails);
-            HashMap<String, String> tokenMap = new HashMap<>();
-            tokenMap.put("token",token);
-            tokenMap.put("tokenHead",tokenHead);
-            tokenMap.put("name",user.getName());
-
-
-            return ResultBean.success("登录成功！",tokenMap);
         }
         return ResultBean.error("用户名或密码不正确！");
     }
 
-    /**
-     * 更据用户名获取用户信息
-     * @param username
-     * @return
-     */
+
     @Override
     public User getUserByUsername(String username) {
         User user = null;
         if (StringUtils.isNoneBlank(username)){
             user = userMapper.selectOne(
-                    new LambdaQueryWrapper<User>()
-                            .eq(User::getUsername, username)
-            );
+                    getQueried(User.class,"username",username));
         }
         return user;
         // return userMapper.selectOne(new QueryWrapper<User>().eq("username",username));
     }
 
-    /**
-     * 用户注册
-     * @param password
-     * @param code
-     * @param request
-     * @return
-     */
+
 
     @Override
     public ResultBean register(String username, String name, String clazzId, String sex,
@@ -140,40 +103,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return ResultBean.error("验证码不符合规范！");
     }
 
-    /**
-     * 用户上传头像
-     * @param username
-     * @param url
-     * @return
-     */
+
     @Override
     public void updateAvatar(String username, String url) {
-
-        this.update(Wrappers.lambdaUpdate(User.class).set(User::getAvatar,url)
-                .eq(User::getUsername,username));
-        // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
-
+        this.update(getUpdated(User.class,"username",username,"avatar",url));
     }
 
-    /**
-     * 用户修改信息（除头像）
-     * @param userInfoUpdateParam
-     */
+
     @Override
     public ResultBean updateUserinfo(UserInfoUpdateParam userInfoUpdateParam) {
         User user = new User();
-        user.setName(userInfoUpdateParam.getNickname());
+        user.setName(userInfoUpdateParam.getName());
 
         this.updateById(user);
 
         return ResultBean.success("保存成功！");
     }
 
-    /**
-     * 通过用户Id获取用户信息
-     * @param id
-     * @return
-     */
     @Override
     public User queryUserinfoById(Integer id) {
 
@@ -182,11 +128,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public ResultBean getUserinfoById(String username) {
+    public ResultBean getUserinfoByUsername(String username) {
         User user = userMapper.selectOne(getQueried(User.class,"username",username));
         user.setPassword(null);
         return ResultBean.success("用户信息获取成功",user);
-
     }
 
 
@@ -194,6 +139,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserInfoByUserId(Integer userId) {
         return userMapper.selectById(userId);
+    }
+
+    @Override
+    public HashMap<String, String> generateTokenMap(String username) {
+        User user =  getUserByUsername(username);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken authenticationToken = new
+                UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        // 生成token
+        String token = jwtTokenUtil.generateToken(userDetails);
+        HashMap<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token",token);
+        tokenMap.put("tokenHead",tokenHead);
+        tokenMap.put("name",user.getName());
+
+        return tokenMap;
     }
 
 }

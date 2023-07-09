@@ -70,14 +70,14 @@ public class UserController {
     @ApiOperation(value = "通过用户ID获取用户信息")
     @GetMapping("/getUserinfoById")
     public ResultBean getUserinfoById(@RequestParam("username") String username){
-        return userService.getUserinfoById(username);
+        return userService.getUserinfoByUsername(username);
     }
 
     @ApiOperation(value = "通过用户Token获取用户信息")
     @GetMapping("/getUserinfoByToken")
     public ResultBean getUserinfoByToken(@RequestParam("token") String token){
         String username = getUserByToken.getUserByToken(token).getUsername();
-        return userService.getUserinfoById(username);
+        return userService.getUserinfoByUsername(username);
     }
 
 }

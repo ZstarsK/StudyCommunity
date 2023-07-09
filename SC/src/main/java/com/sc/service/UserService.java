@@ -5,9 +5,11 @@ import com.github.pagehelper.PageInfo;
 import com.sc.entity.User;
 import com.sc.vo.ResultBean;
 import com.sc.vo.param.UserInfoUpdateParam;
+import org.apache.el.parser.Token;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -64,7 +66,7 @@ public interface UserService extends IService<User> {
      */
     ResultBean updateUserinfo(UserInfoUpdateParam userInfoUpdateParam);
 
-    ResultBean getUserinfoById(String username);
+    ResultBean getUserinfoByUsername(String username);
     /**
      * 通过用户id获取用户信息
      * @param id
@@ -79,6 +81,8 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getUserInfoByUserId(Integer userId);
+
+    HashMap<String, String> generateTokenMap(String username);
 
 
 }
