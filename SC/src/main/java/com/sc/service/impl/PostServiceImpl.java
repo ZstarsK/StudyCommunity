@@ -140,7 +140,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public void updateUrl(String tableField, String url, String postId) {
-        this.update(new UpdateWrapper<Post>().set("tableField",url).eq("postId",postId));
+        this.update(new UpdateWrapper<Post>().set("image",url).eq("postId",postId));
         // this.update(new UpdateWrapper<User>().set("portrait",pathDB).eq("id",id));
 
     }

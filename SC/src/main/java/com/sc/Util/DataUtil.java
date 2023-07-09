@@ -38,10 +38,13 @@ public class DataUtil {
             alterFileName = UUID.randomUUID().toString();
             //"D:/"+alterFileName + "." + pType;
             filePath = path + alterFileName + "." + pType;
+
         }
         //用户先传其他信息，获取保存到服务器的路径并保存
         else{
+            //path + fileName + "." + pType;
             filePath = path + fileName + "." + pType;
+            System.out.println("filePath: "+filePath);
             alterFileName=fileName;
         }
         System.out.println(filePath);
@@ -55,7 +58,7 @@ public class DataUtil {
         //获取输送给前端的url
         String urlPath=path.substring(path.indexOf("/")+16);
 
-        return "http://" + "1.117.52.175:3306" + "/Pic/"+urlPath + alterFileName + "."+pType;
+        return "http://" + "1.117.52.175:8084" + "/Pic/"+urlPath + alterFileName + "."+pType;
 
 
     }
@@ -63,17 +66,23 @@ public class DataUtil {
     public static String updatePostFile(MultipartFile file, String fullPath, String path, String fileName) {
         String pType = getFileType(file);
         //用户第一次上传文件,fullPath=null;
-        if (!file.isEmpty()&&fullPath.length()>0) {
+        if (!file.isEmpty()&&fullPath.length()==0) {
             return (saveFiles(file,path,fileName));
         }
         //用户非第一次上传文件
         else{
-            //fullPath="Http://ip:port/pic/path/postId.pType";
-            //正则表达式，用于截取“path/postId.pType”;
+            //fullPath="Http://ip:port/Pic/path/postId.pType";
 
-            int index = fullPath.indexOf("/pic/") + 5;
-            String filePath ="/StudyCommunity/"+ fullPath.substring(index);
-            File originFile = new File(filePath);
+
+            int indexStart = fullPath.indexOf("/Pic/") + 5;
+            int indexEnd = fullPath.length() - new StringBuilder(fullPath).reverse().toString().indexOf(".");
+
+
+            //"/StudyCommunity/"+ fullPath.substring(index);
+            String origFilePath ="/StudyCommunity/"+ fullPath.substring(indexStart);;
+
+
+            File originFile = new File(origFilePath);
             //动态之前包含文件，用户删除文件
             if (originFile.exists()) {
                 if (file.isEmpty()) {
@@ -83,7 +92,10 @@ public class DataUtil {
             }
             //用户修改文件
             if (!file.isEmpty()) {
+                String filePath ="/StudyCommunity/"+ fullPath.substring(indexStart,indexEnd)+pType;
+                fullPath=fullPath.substring(0,indexEnd)+pType;
                 try {
+                    originFile.delete();
                     file.transferTo(new File(filePath));
                     return fullPath;
                 } catch (Exception e) {
@@ -97,7 +109,11 @@ public class DataUtil {
     //获取文件类型
     public static String getFileType(MultipartFile file) {
         String pType = file.getContentType();
-        return pType.substring(pType.indexOf("/") + 1);
+        pType = pType.substring(pType.indexOf("/") + 1);
+        if ("jpeg".equals(pType)){
+            pType = "jpg";
+        }
+        return pType;
     }
 
 

@@ -67,8 +67,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Comment saveValues(CommentParam commentParam) {
         String commentId= commentParam.getCommentId();
+        System.out.println(commentId);
         Comment comment=new Comment();
-        if (commentId!=null&&!commentId.isEmpty()) comment.setReply(commentParam.getCommentId());
+        if (commentId!=null&&!commentId.isEmpty()) {
+            System.out.println("aaaaaaa");
+            comment.setReply(commentParam.getCommentId());
+        }
         comment.setPostId(commentParam.getPostId());
         comment.setUsername(commentParam.getUsername());
         comment.setDetail(commentParam.getDetail());

@@ -86,7 +86,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "更新用户动态里的文件")
-    @PostMapping("/post/file/update")
+    @PutMapping("/post/file/update")
     public ResultBean saveAndUpdatePostFile(@RequestParam("postId") String postId,@RequestParam("url") String url,
                                      @RequestParam("file") MultipartFile file) throws IOException {
         String recUrl=updatePostFile(file,url,picPath,postId);
