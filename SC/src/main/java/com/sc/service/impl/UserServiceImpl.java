@@ -28,9 +28,6 @@ import java.util.*;
  * <p>
  *  服务实现类
  * </p>
- *
- * @author jingchao
- * @since 2022/04/16 20:18
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -55,7 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
-                        .eq(User::getUsername, username));//从手机号获取整个user信息
+                        .eq(User::getUsername, username));//从username获取整个user信息
 
         if (user != null && passwordEncoder.matches(password,user.getPassword())){
 
@@ -81,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 更据用户名获取用户信息
      * @param username
-     * @return
+     * @return user
      */
     @Override
     public User getUserByUsername(String username) {
@@ -93,7 +90,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             );
         }
         return user;
-        // return userMapper.selectOne(new QueryWrapper<User>().eq("username",username));
     }
 
     /**
@@ -103,7 +99,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param request
      * @return
      */
-
     @Override
     public ResultBean register(String username, String name, String clazzId, String sex,
                                String role, String schoolId, String password, String avatar,

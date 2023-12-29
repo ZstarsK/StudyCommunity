@@ -1,6 +1,7 @@
 package com.sc.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.sc.vo.param.PostParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Getter
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @TableName("post")
 @Accessors(chain = true)
 @ApiModel(value = "Post对象", description = "")
+
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,5 +61,21 @@ public class Post implements Serializable {
     @ApiModelProperty("赞数")
     @TableField("likes")
     private int likes;
+
+    
+    public static Post createPostFromParam(PostParam postParam) {
+        return new Post()
+                .setPostId(postParam.getPostId())
+                .setUsername(postParam.getUsername())
+                .setClazzId(postParam.getClassId())
+                .setTitle(postParam.getTitle())
+                .setDetail(postParam.getPostContent())
+                .setImage(postParam.getImagePath())
+                .setVideo(postParam.getVideoPath())
+                .setPostTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .setLikes(postParam.getLikes());
+    }
+    
+    
 
 }

@@ -13,7 +13,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="demo" target="1.8" />
-      <module name="SC" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

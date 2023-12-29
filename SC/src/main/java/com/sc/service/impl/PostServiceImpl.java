@@ -16,25 +16,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Autowired
     private PostMapper postMapper;
-
-    @Autowired
-    private CommentServiceImpl commentService;
+    
 
     @Value("${pic_storage.ip}")
     private String ip;
 
     @Value("${vid_storage.port}")
     private String port;
+    
 
 
     @Override
@@ -46,9 +47,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResultBean getPostInfoByClazzId(String clazzId) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("clazzId", clazzId);
-        /*queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("clazzId", clazzId);
-        List<Post> posts = postMapper.selectList(queryWrapper);*/
         return ResultBean.success("动态加载成功",postMapper.selectList(queryWrapper));
     }
 
@@ -62,43 +60,32 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResultBean saveUserPost(PostParam postParam) {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String day = format.format(date);
-
-        Post post=new Post();
-        post.setPostId(postParam.getPostId());
-        post.setUsername(postParam.getUsername());
-        post.setClazzId(postParam.getClassId());
-        post.setTitle(postParam.getTitle());
-        post.setDetail(postParam.getPostContent());
-        post.setImage(postParam.getImagePath());
-        post.setVideo(postParam.getVideoPath());
-        post.setPostTime(day);
-        post.setLikes(postParam.getLikes());
-
-        this.save(post);
-
+        Post post = Post.createPostFromParam(postParam);
+        postMapper.insert(post);
         return ResultBean.success("动态发发布成功!",post);
     }
 
+    
+
     @Override
     public ResultBean updatePostInfoById(PostParam postParam) {
+        // 创建一个UpdateWrapper实例
+        UpdateWrapper<Post> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("post_id", postParam.getPostId())
+                .set("detail", postParam.getPostContent())
+                .set("title", postParam.getTitle())
+                .set("image", postParam.getImagePath())
+                .set("video", postParam.getVideoPath())
+                .set("likes", postParam.getLikes());
 
-        Post post=postMapper.selectById(postParam.getPostId());
+        // 执行更新操作
+        postMapper.update(null, updateWrapper);
 
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getDetail,postParam.getPostContent())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getTitle,postParam.getTitle())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getImage,postParam.getImagePath())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getVideo,postParam.getVideoPath())
-                .eq(Post::getPostId,postParam.getPostId()));
-        this.update(Wrappers.lambdaUpdate(post).set(Post::getLikes,postParam.getLikes())
-                .eq(Post::getPostId,postParam.getPostId()));
+        // 重新获取更新后的Post对象
+        Post updatedPost = postMapper.selectById(postParam.getPostId());
 
-        return ResultBean.success("动态更新成功",post);
+        // 返回成功响应
+        return ResultBean.success("动态更新成功", updatedPost);
     }
 
     @Override
